@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Login Operator</title>
-  <link rel="stylesheet" href=".CSS/style.css" />
-  <script src=".Js/login.js" defer></script>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="../js/login.js" defer></script>
 </head>
 <body>
   <div class="login-container">
@@ -12,14 +12,18 @@
     <form id="loginForm" autocomplete="off">
       <label for="username">Username</label>
       <input type="text" id="username" name="username" autocomplete="off" required>
-    
+
       <label for="password">Password</label>
       <input type="password" id="password" name="password" autocomplete="new-password" required>
-    
+
       <button type="submit">Login</button>
-    </form>    
+
+      <!-- Pesan error -->
+      <div id="errorMsg" style="color: red; margin-top: 10px;"></div>
+    </form>
+
     <div class="register-link">
-      Belum punya akun? <a href=".HTML/register.html">Buat akun</a>
+      Belum punya akun? <a href="../html/register.html">Buat akun</a>
     </div>
   </div>
 

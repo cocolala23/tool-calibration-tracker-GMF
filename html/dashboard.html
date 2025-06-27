@@ -4,20 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard Kalibrasi</title>
-  <link rel="stylesheet" href=".CSS/style.css" />
+  <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
 
   <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-left">
-      <h2>Dashboard Kalibrasi</h2>
+      <h2>Kalibration Tools</h2>
     </div>
+    
     <div class="navbar-right">
+      <a href="../html/alat.html" class="btn-tambah-alat">➕ Tambah Tools</a>
       <div class="user-dropdown">
         <span id="loggedInUser" class="username-display">Pengguna</span>
         <div class="dropdown-content" id="userDropdown">
-          <a href=".HTML/profile.html" id="editProfileBtn">✏️ Edit Profil</a>
+          <a href="../html/profile.html" id="editProfileBtn">✏️ Edit Profil</a>
           <a href="#" id="logoutBtn">🔒 Logout</a>
         </div>
       </div>
@@ -26,9 +28,8 @@
 
   <!-- Konten Utama Dashboard -->
   <main class="dashboard-content">
-    <h3>Selamat datang di Sistem Monitoring Kalibrasi</h3>
-    <p>Berikut ini adalah daftar alat yang harus dikalibrasi dalam waktu dekat:</p>
-
+    <h3>Pantau kapan tools harus di kalibrasi</h3>
+    <p>data tools yang harus di kalibrasi</p>
     <!-- Tabel alat kalibrasi -->
     <div class="table-section">
       <table id="alatTable">
@@ -44,8 +45,23 @@
         </tbody>
       </table>
     </div>
+        <!-- Tabel alat kalibrasi -->
+    <p>data tools yang telah jatuh tempo</p>
+    <div class="table-section2">
+      <table id="alatTable">
+        <thead>
+          <tr>
+            <th>Kode Alat</th>
+            <th>Nama Alat</th>
+            <th>Next Due</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data alat akan dimuat melalui JS -->
+        </tbody>
+      </table>
+    </div>
   </main>
-
-  <script src=".Js/dashboard.js"></script>
+  <script src="../js/dashboard.js"></script>
 </body>
 </html>
