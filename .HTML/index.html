@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login Operator</title>
+  <link rel="stylesheet" href=".CSS/style.css" />
+  <script src=".Js/login.js" defer></script>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login Operator</h1>
+    <form id="loginForm" autocomplete="off">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" autocomplete="off" required>
+    
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="new-password" required>
+    
+      <button type="submit">Login</button>
+    </form>    
+    <div class="register-link">
+      Belum punya akun? <a href=".HTML/register.html">Buat akun</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const user = users.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("loggedInUser", username);
+        window.location.href = "dashboard.html";
+      } else {
+        document.getElementById("errorMsg").textContent = "Username atau password salah.";
+      }
+    });
+  </script>
+</body>
+</html>

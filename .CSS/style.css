@@ -1,0 +1,432 @@
+/* General reset */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f0f8ff;
+  color: #333;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #0077b6;
+  color: white;
+  padding: 1em 2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar button {
+  background-color: #90e0ef;
+  color: #03045e;
+  border: none;
+  padding: 0.6em 1em;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.navbar button:hover {
+  background-color: #caf0f8;
+}
+
+/* Container */
+.container {
+  max-width: 1000px;
+  margin: 2em auto;
+  padding: 2em;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Headers */
+h1, h2 {
+  color: #03045e;
+  margin-bottom: 0.5em;
+}
+
+/* Form Styles */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-bottom: 2em;
+}
+
+form label {
+  font-weight: 600;
+  margin-top: 0.5em;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="date"] {
+  padding: 0.7em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+}
+
+form button {
+  background-color: #0077b6;
+  color: white;
+  border: none;
+  padding: 0.75em;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1em;
+  transition: 0.3s;
+}
+
+form button:hover {
+  background-color: #0096c7;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+
+table thead {
+  background-color: #0077b6;
+  color: white;
+}
+
+table th, table td {
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+table tr:nth-child(even) {
+  background-color: #f1f9ff;
+}
+
+table button {
+  padding: 0.4em 0.8em;
+  background-color: #ef476f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+table button:hover {
+  background-color: #d62839;
+}
+
+/* Login/Register Container */
+.login-container {
+  max-width: 400px;
+  margin: 5em auto;
+  background-color: white;
+  padding: 2em;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h1 {
+  text-align: center;
+  color: #0077b6;
+  margin-bottom: 1em;
+}
+
+/* Input dan Select Style Disatukan */
+.login-container input,
+.login-container select {
+  padding: 0.6em;
+  margin-bottom: 1em;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+}
+
+.login-container select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%22292%22%20height%3D%22292%22%20viewBox%3D%220%200%20292%20292%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M287%2069c5%205%205%2013%200%2018L159%20215c-5%205-13%205-18%200L5%2087c-5-5-5-13%200-18s13-5%2018%200l123%20123L269%2069c5-5%2013-5%2018%200z%22%20fill%3D%22%23333%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75em center;
+  background-size: 0.65em auto;
+}
+
+.login-container button {
+  background: #0077b6;
+  color: white;
+  padding: 0.75em;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1em;
+}
+
+.login-container button:hover {
+  background: #0096c7;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 1em;
+}
+
+.register-link a {
+  color: #0077b6;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* Pesan error */
+.error {
+  color: red;
+  margin-top: 0.5em;
+  text-align: center;
+}
+
+form select {
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.error-field {
+  color: #e63946;
+  font-size: 0.85em;
+  margin-top: -1.5em;
+  margin-bottom: -0.5em;
+  min-height: 0.5em;
+}
+
+/* Animasi getar untuk validasi error */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+.input-error {
+  border-color: #e63946 !important;
+  animation: shake 0.3s ease;
+  background-color: #ffe6e6;
+}
+
+.success-popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 1em 2em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  font-weight: bold;
+  z-index: 9999;
+  animation: fadeInOut 3s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; top: 10px; }
+  10% { opacity: 1; top: 20px; }
+  90% { opacity: 1; top: 20px; }
+  100% { opacity: 0; top: 10px; }
+}
+
+/* Error Message */
+.error {
+  color: red;
+  text-align: center;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* Info Board & Summary */
+.info-board,
+.summary {
+  background-color: #e0f7fa;
+  padding: 1em;
+  border-left: 5px solid #00b4d8;
+  margin: 1.5em 0;
+  border-radius: 8px;
+}
+
+.info-board ul {
+  margin: 0;
+  padding-left: 1em;
+}
+
+.info-board li {
+  padding: 0.3em 0;
+}
+
+/* Navbar username dropdown */
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.username-display::after {
+  content: " ▼";
+  font-size: 1em;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 0.5em;
+  min-width: 160px;
+  z-index: 999;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  font-size: 0.95em;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 0.75em 1em;
+  text-decoration: none;
+  color: #333;
+  font-weight: normal;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+  color: #0077b6;
+}
+
+/* Profil Tambahan spacing dan style */
+label {
+  font-weight: 600;
+  margin-top: 0.5em;
+}
+
+.error-field {
+  color: #e63946;
+  font-size: 0.85em;
+  min-height: 1.2em;
+}
+
+input.input-error, select.input-error {
+  border-color: #e63946;
+  background-color: #ffe6e6;
+}
+
+button {
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #0096c7;
+}
+
+button#deleteAccountBtn {
+  background-color: #d62839;
+  margin-top: 1em;
+}
+
+button#deleteAccountBtn:hover {
+  background-color: #ba1c2f;
+}
+
+/* Popup */
+.popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #0077b6;
+  color: white;
+  padding: 1em 2em;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+  animation: fadeInOut 2.5s ease-in-out;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; top: 10px; }
+  10% { opacity: 1; top: 20px; }
+  90% { opacity: 1; top: 20px; }
+  100% { opacity: 0; top: 10px; }
+}
+
+.popup-content {
+  font-weight: bold;
+  font-size: 1em;
+  text-align: center;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 2em;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-actions {
+  margin-top: 1.5em;
+}
+
+.modal-actions button {
+  background-color: #0077b6;
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 0 0.5em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-actions button:hover {
+  background-color: #0096c7;
+}
+

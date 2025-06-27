@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Profil</title>
+  <link rel="stylesheet" href=".CSS/style.css" />
+</head>
+<body>
+  <div class="navbar">
+    <span>Edit Profil</span>
+    <span id="usernameDisplay"></span>
+  </div>
+
+  <div class="container">
+    <h2>Ubah Data Akun</h2>
+    <form id="editForm">
+      <label for="editUsername">Username</label>
+      <input type="text" id="editUsername" required />
+      <div class="error-field" id="errorUsername"></div>
+
+      <label for="editPhone">Nomor HP</label>
+      <input type="text" id="editPhone" required />
+      <div class="error-field" id="errorPhone"></div>
+
+      <label for="editPassword">Password</label>
+      <input type="password" id="editPassword" required />
+      <div class="error-field" id="errorPassword"></div>
+
+      <button type="submit">💾 Simpan Perubahan</button>
+      <button type="button" id="deleteAccountBtn">🗑 Hapus Akun</button>
+    </form>
+  </div>
+
+  <!-- Popup -->
+  <div id="popup" class="popup hidden">
+    <div class="popup-content" id="popup-message"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="confirmModal" class="modal hidden">
+    <div class="modal-content">
+      <p id="confirmMessage"></p>
+      <div class="modal-actions">
+        <button id="confirmYes">Ya</button>
+        <button id="confirmNo">Tidak</button>
+      </div>
+    </div>
+  </div>
+
+  <script src=".Js/profile.js"></script>
+</body>
+</html>

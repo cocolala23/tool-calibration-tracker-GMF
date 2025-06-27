@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register Akun</title>
+  <link rel="stylesheet" href="C:\project gmf\.CSS\style.css" />
+</head>
+<body>
+  <div class="login-container">
+    <h1>Daftar Akun</h1>
+    <form id="registerForm" autocomplete="off">
+      <label for="regUsername">Username</label>
+      <input type="text" id="regUsername" name="username" autocomplete="new-username" required />
+      <div class="error-field" id="errorUsername"></div>
+
+      <label for="regPassword">Password</label>
+      <input type="password" id="regPassword" name="password" autocomplete="new-password" required />
+      <div class="error-field" id="errorPassword"></div>
+
+      <label for="regPhone">Nomor HP</label>
+      <input type="text" id="regPhone" name="phone" autocomplete="off" placeholder="08xxxxxxxxxx" required />
+      <div class="error-field" id="errorPhone"></div>
+
+      <label for="regLevel">Level Jabatan</label>
+      <select id="regLevel" name="level" required>
+        <option value="">-- Pilih Jabatan --</option>
+        <option value="Operator">Operator</option>
+        <option value="Manajer">Manajer</option>
+        <option value="Supervisor">Supervisor</option>
+        <option value="Admin">Admin</option>
+      </select>
+      <div class="error-field" id="errorLevel"></div>
+
+      <button type="submit">Daftar</button>
+    </form>
+
+    <div class="register-link">
+      <p>Sudah punya akun? <a href=".HTML\index.html">Login di sini</a></p>
+    </div>
+  </div>
+
+  <script src="register.js"></script>
+</body>
+</html>

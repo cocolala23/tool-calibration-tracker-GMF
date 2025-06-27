@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Kalibrasi</title>
+  <link rel="stylesheet" href=".CSS/style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <h2>Dashboard Kalibrasi</h2>
+    </div>
+    <div class="navbar-right">
+      <div class="user-dropdown">
+        <span id="loggedInUser" class="username-display">Pengguna</span>
+        <div class="dropdown-content" id="userDropdown">
+          <a href=".HTML/profile.html" id="editProfileBtn">✏️ Edit Profil</a>
+          <a href="#" id="logoutBtn">🔒 Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Konten Utama Dashboard -->
+  <main class="dashboard-content">
+    <h3>Selamat datang di Sistem Monitoring Kalibrasi</h3>
+    <p>Berikut ini adalah daftar alat yang harus dikalibrasi dalam waktu dekat:</p>
+
+    <!-- Tabel alat kalibrasi -->
+    <div class="table-section">
+      <table id="alatTable">
+        <thead>
+          <tr>
+            <th>Kode Alat</th>
+            <th>Nama Alat</th>
+            <th>Next Due</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data alat akan dimuat melalui JS -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src=".Js/dashboard.js"></script>
+</body>
+</html>
