@@ -2,24 +2,29 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login Operator</title>
   <link rel="stylesheet" href="../style.css" />
-  <script src="../js/login.js" defer></script>
 </head>
 <body>
+
   <div class="login-container">
     <h1>Login Operator</h1>
+
     <form id="loginForm" autocomplete="off">
       <label for="username">Username</label>
       <input type="text" id="username" name="username" autocomplete="off" required>
 
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" autocomplete="new-password" required>
+      <div class="password-container">
+        <input type="password" id="password" name="password" autocomplete="new-password" required />
+        <img src="../gambar/eye.png" alt="Toggle Password" id="togglePassword" class="toggle-password-icon" />
+      </div>
 
       <button type="submit">Login</button>
 
       <!-- Pesan error -->
-      <div id="errorMsg" style="color: red; margin-top: 10px;"></div>
+      <div id="errorMsg" class="error"></div>
     </form>
 
     <div class="register-link">
@@ -27,6 +32,7 @@
     </div>
   </div>
 
+  <!-- Script Login dan Toggle Password -->
   <script>
     document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -44,6 +50,18 @@
         document.getElementById("errorMsg").textContent = "Username atau password salah.";
       }
     });
+
+    // Toggle password visibility
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+    let visible = false;
+
+    togglePassword.addEventListener("click", () => {
+      visible = !visible;
+      passwordInput.type = visible ? "text" : "password";
+      togglePassword.src = visible ? "../gambar/lihat.png" : "../gambar/eye.png";
+    });
   </script>
+
 </body>
-</html>  
+</html>
