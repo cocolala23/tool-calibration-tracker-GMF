@@ -10,12 +10,20 @@
   <div class="login-container">
     <h1>Daftar Akun</h1>
     <form id="registerForm" autocomplete="off">
+
+      <label for="regId">ID Pegawai</label>
+      <input type="text" id="regId" name="id" required />
+      <div class="error-field" id="errorId"></div>
+
       <label for="regUsername">Username</label>
       <input type="text" id="regUsername" name="username" autocomplete="new-username" required />
       <div class="error-field" id="errorUsername"></div>
 
       <label for="regPassword">Password</label>
-      <input type="password" id="regPassword" name="password" autocomplete="new-password" required />
+      <div class="password-container">
+        <input type="password" id="regPassword" name="password" autocomplete="new-password" required />
+        <span class="toggle-password" id="togglePassword"></span>
+      </div>
       <div class="error-field" id="errorPassword"></div>
 
       <label for="regPhone">Nomor HP</label>

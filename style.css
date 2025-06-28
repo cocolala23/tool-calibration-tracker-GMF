@@ -32,26 +32,13 @@ body {
 
 /* Navbar */
 .navbar {
-  background-color:#005888;
-  color: white;
+  background-color: whitesmoke;
+  color: grey;
   padding: 1em 2em;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-.btn-logout {
-  background-color: #90e0ef;
-  color: white;
-  border: none;
-  padding: 0.6em 1em;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.navbar .btn-logout:hover {
-  background-color: #caf0f8;
 }
 
 .navbar button {
@@ -76,8 +63,20 @@ body {
 }
 
 .navbar-left h2 {
-color: white;
+color: grey;
   font-size: 1.2em;
+}
+
+
+.navbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navbar-logo {
+  height: 40px;
+  object-fit: contain;
 }
 
 /* Container */
@@ -478,3 +477,27 @@ button#deleteAccountBtn:hover {
   background-color: #0096c7;
 }
 
+/*pw register */
+.password-container {
+  position: relative;
+}
+
+.password-container input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2em;
+  user-select: none;
+  color: #0077b6;
+}
+
+.toggle-password:hover {
+  color: #023e8a;
+}

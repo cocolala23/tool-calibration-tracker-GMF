@@ -16,4 +16,3 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
     localStorage.setItem("loggedInUser", user.username);
 
   });
-  
