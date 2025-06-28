@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard Kalibrasi</title>
-  <title>Dashboard</title>
-    <title>Dashboard</title>
   <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
@@ -14,6 +12,11 @@
   <nav class="navbar">
     <div class="navbar-left">
       <h2>Kalibration Tools</h2>
+    </div>
+
+    <!-- Gambar Tengah Navbar -->
+    <div class="navbar-center">
+      <img src="C:\kuliah\aku\CV_mfebrinr\GMF\project gmf\share\project gmf\gambar\logo perusahaan.png" alt="Logo" class="navbar-logo" />
     </div>
     
     <div class="navbar-right">
@@ -30,9 +33,25 @@
 
   <!-- Konten Utama Dashboard -->
   <main class="dashboard-content">
-    <h3>Pantau kapan tools harus di kalibrasi</h3>
-    <p>data tools yang harus di kalibrasi</p>
-    <!-- Tabel alat kalibrasi -->
+    <h3>Kalibrasi Terdekat</h3>
+    <p>Berikut adalah 5 alat dengan tanggal kalibrasi terdekat:</p>
+    <div class="table-section">
+      <table id="tabelTerdekat">
+        <thead>
+          <tr>
+            <th>Kode Alat</th>
+            <th>Nama Alat</th>
+            <th>Next Due</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Diisi via JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Pantau kapan tools harus dikalibrasi</h3>
+    <p>Data tools yang harus dikalibrasi</p>
     <div class="table-section">
       <table id="alatTable">
         <thead>
@@ -43,14 +62,14 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Data alat akan dimuat melalui JS -->
+          <!-- Data alat dimuat via JS -->
         </tbody>
       </table>
     </div>
-        <!-- Tabel alat kalibrasi -->
-    <p>data tools yang telah jatuh tempo</p>
+
+    <p>Data tools yang telah jatuh tempo</p>
     <div class="table-section2">
-      <table id="alatTable">
+      <table id="alatTable2">
         <thead>
           <tr>
             <th>Kode Alat</th>
@@ -59,11 +78,12 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Data alat akan dimuat melalui JS -->
+          <!-- Data alat dimuat via JS -->
         </tbody>
       </table>
     </div>
   </main>
+
   <script src="../js/dashboard.js"></script>
 </body>
 </html>
