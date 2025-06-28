@@ -14,7 +14,16 @@
       <h2>Sistem Kalibrasi</h2>
     </div>
     <div class="navbar-right">
-      <button onclick="logout()">🔒 Logout</button>
+      <button onclick="logout()" class="btn-logout">🔒 Logout</button>
+
+    <div class="user-dropdown">
+        <span id="loggedInUser" class="username-display">Pengguna</span>
+        <div class="dropdown-content" id="userDropdown">
+          <a href="../html/profile.html" id="editProfileBtn">✏️ Edit Profil</a>
+          <a href="#" id="logoutBtn">🔒 Logout</a>
+        </div>
+
+      </div>
     </div>
   </nav>
 
@@ -84,6 +93,33 @@
     if (!localStorage.getItem("isLoggedIn")) {
       window.location.href = "../index.html";
     }
+    
+    // Ambil username dari localStorage setelah login
+const loggedInUser = localStorage.getItem("loggedInUser");
+
+// Jika belum login, arahkan ke login
+if (!loggedInUser) {
+  alert("❗ Anda harus login terlebih dahulu.");
+  window.location.href = "index.html";
+}
+
+// Tampilkan username
+document.getElementById("loggedInUser").textContent = loggedInUser;
+
+// Toggle dropdown saat klik username
+document.getElementById("loggedInUser").addEventListener("click", () => {
+  const dropdown = document.getElementById("userDropdown");
+  dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+});
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("loggedInUser");
+  window.location.href = "index.html";
+});
+    document.getElementById("editProfileBtn").addEventListener("click", () => {
+  window.location.href = "edit-profile.html";
+});
 
     function logout() {
       localStorage.removeItem("isLoggedIn");
