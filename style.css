@@ -18,6 +18,17 @@ body {
   text-decoration: none;
   transition: 0.2s;
 }
+.btn-logout{
+  background-color: #90e0ef;
+  color: #03045e;
+  border: none;
+  padding: 0.6em 1em;
+  margin-right: 1em;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.2s;
+}
 
 .btn-tambah-alat:hover {
   background-color: #caf0f8;
