@@ -487,31 +487,3 @@ button#deleteAccountBtn:hover {
 .modal-actions button:hover {
   background-color: #0096c7;
 }
-
-/*pw register */
-.password-container {
-  position: relative;
-}
-
-.password-container input {
-  width: 100%;
-  padding-right: 40px; /* Beri ruang agar icon tidak menutupi input */
-  box-sizing: border-box;
-}
-
-.toggle-password-icon {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-80%);
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
-}
-
-.toggle-password-icon:hover {
-  opacity: 1;
-}
-

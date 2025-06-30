@@ -1,18 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   const passwordInput = document.getElementById("password");
-  const togglePassword = document.getElementById("togglePassword");
-  let isPasswordVisible = false;
-
-  // Toggle password visibility
-  togglePassword.addEventListener("click", () => {
-    isPasswordVisible = !isPasswordVisible;
-    passwordInput.type = isPasswordVisible ? "text" : "password";
-    togglePassword.src = isPasswordVisible
-      ? "../gambar/lihat.png"
-      : "../gambar/eye.png";
-    togglePassword.alt = isPasswordVisible ? "Sembunyikan Password" : "Tampilkan Password";
-  });
 
   // Handle login submit
   form.addEventListener("submit", (e) => {

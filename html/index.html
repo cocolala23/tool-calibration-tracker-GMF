@@ -16,10 +16,7 @@
       <input type="text" id="username" name="username" autocomplete="off" required>
 
       <label for="password">Password</label>
-      <div class="password-container">
-        <input type="password" id="password" name="password" autocomplete="new-password" required />
-        <img src="../gambar/eye.png" alt="Toggle Password" id="togglePassword" class="toggle-password-icon" />
-      </div>
+      <input type="password" id="password" name="password" autocomplete="new-password" required>
 
       <button type="submit">Login</button>
 
@@ -32,7 +29,7 @@
     </div>
   </div>
 
-  <!-- Script Login dan Toggle Password -->
+  <!-- Script Login -->
   <script>
     document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -49,17 +46,6 @@
       } else {
         document.getElementById("errorMsg").textContent = "Username atau password salah.";
       }
-    });
-
-    // Toggle password visibility
-    const togglePassword = document.getElementById("togglePassword");
-    const passwordInput = document.getElementById("password");
-    let visible = false;
-
-    togglePassword.addEventListener("click", () => {
-      visible = !visible;
-      passwordInput.type = visible ? "text" : "password";
-      togglePassword.src = visible ? "../gambar/lihat.png" : "../gambar/eye.png";
     });
   </script>
 
