@@ -7,33 +7,6 @@ body {
   color: #333;
 }
 
-.btn-tambah-alat {
-  background-color: #90e0ef;
-  color: #03045e;
-  border: none;
-  padding: 0.6em 1em;
-  margin-right: 1em;
-  border-radius: 6px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: 0.2s;
-}
-.btn-logout{
-  background-color: #90e0ef;
-  color: #03045e;
-  border: none;
-  padding: 0.6em 1em;
-  margin-right: 1em;
-  border-radius: 6px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: 0.2s;
-}
-
-.btn-tambah-alat:hover {
-  background-color: #caf0f8;
-}
-
 .dashboard-content {
   display: flex;
   flex-direction: column;
@@ -50,21 +23,6 @@ body {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.navbar button {
-  background-color: #90e0ef;
-  color: #03045e;
-  border: none;
-  padding: 0.6em 1em;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.navbar button:hover {
-  background-color: #caf0f8;
 }
 
 .alat-nav {
@@ -89,6 +47,8 @@ color: grey;
   height: 40px;
   object-fit: contain;
 }
+
+
 
 /* Container */
 .container {
@@ -375,6 +335,49 @@ form select {
   background-color: #f1f1f1;
   color: #0077b6;
 }
+
+/* Navbar kanan gabungkan Tools & User */
+.user-tools-group {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+/* Link Tools di Navbar */
+
+.nav-tools-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5em 0.5em;
+}
+
+.nav-tools-link:hover {
+  color: #0077b6;
+}
+
+.nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+/* Garis vertikal pemisah antara tombol Tools dan Username */
+.vertical-divider {
+  width: 1px;
+  height: 40px;
+  background-color: #ccc;
+  margin: 0 0.5em;
+}
+
+/* grafik */
+.chart-container {
+  background: white;
+  padding: 1em;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
 
 /* Profil Tambahan spacing dan style */
 label {

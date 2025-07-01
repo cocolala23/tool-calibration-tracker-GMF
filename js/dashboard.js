@@ -1,92 +1,132 @@
-// Ambil username dari localStorage setelah login
+// Cek login
 const loggedInUser = localStorage.getItem("loggedInUser");
-
-// Cek apakah user sudah login
 if (!loggedInUser) {
   alert("❗ Anda harus login terlebih dahulu.");
   window.location.href = "index.html";
 }
 
-// Tampilkan username di navbar
 document.getElementById("loggedInUser").textContent = loggedInUser;
-
-// Toggle dropdown user
 document.getElementById("loggedInUser").addEventListener("click", () => {
   const dropdown = document.getElementById("userDropdown");
   dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
 });
-
-// Logout
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("loggedInUser");
   window.location.href = "index.html";
 });
-
-// Navigasi ke edit profil
 document.getElementById("editProfileBtn").addEventListener("click", () => {
-  window.location.href = "profile.html"; // Sesuai dengan HTML yang kamu gunakan
+  window.location.href = "profile.html";
 });
 
-// ================================================
-// Contoh data alat (harusnya nanti dari localStorage)
-const alatKalibrasi = [
-  {
-    kode: "2TBAXX055",
-    nama: "VERNIER CALIPER",
-    nextDue: "2025-07-01"
-  },
-  {
-    kode: "2TBAAY033",
-    nama: "MICROMETER",
-    nextDue: "2025-08-10"
-  },
-  {
-    kode: "3TBAZZ011",
-    nama: "TORQUE WRENCH",
-    nextDue: "2025-06-30"
-  },
-  {
-    kode: "4TBAQQ088",
-    nama: "PRESSURE GAUGE",
-    nextDue: "2025-07-15"
-  },
-  {
-    kode: "5TBARR099",
-    nama: "MULTIMETER",
-    nextDue: "2025-07-05"
-  },
-  {
-    kode: "6TBAMM002",
-    nama: "THERMOMETER",
-    nextDue: "2025-07-03"
-  }
+// Data dummy jadwal kalibrasi (lebih dari 5 untuk pengujian)
+const jadwalKalibrasi = [
+  { kode: "2TBAXX055", nama: "VERNIER CALIPER", nextDue: "2025-07-01" },
+  { kode: "2TBAAY033", nama: "MICROMETER", nextDue: "2025-06-28" },
+  { kode: "3TBAZZ011", nama: "TORQUE WRENCH", nextDue: "2025-06-27" },
+  { kode: "4TBBXX099", nama: "HEIGHT GAUGE", nextDue: "2025-07-15" },
+  { kode: "5TBCYY101", nama: "DIAL GAUGE", nextDue: "2025-07-10" },
+  { kode: "6TBCZZ111", nama: "THICKNESS GAUGE", nextDue: "2025-08-01" }
 ];
 
-// ===============================
-// Tampilkan semua alat ke tabel utama
-const tableAll = document.querySelector("#alatTable tbody");
-alatKalibrasi.forEach(alat => {
+// Data dummy status proses kalibrasi
+const statusKalibrasi = [
+  { kode: "2TBAXX055", nama: "VERNIER CALIPER", mulai: "2025-06-20", sisaHari: 0, status: "✅ Selesai" },
+  { kode: "2TBAAY033", nama: "MICROMETER", mulai: "2025-06-25", sisaHari: 2, status: "⏳ Dalam proses" },
+  { kode: "3TBAZZ011", nama: "TORQUE WRENCH", mulai: "-", sisaHari: "-", status: "❌ Belum diminta" },
+  { kode: "4TBBXX099", nama: "HEIGHT GAUGE", mulai: "2025-06-21", sisaHari: 5, status: "⏳ Dalam proses" },
+  { kode: "5TBCYY101", nama: "DIAL GAUGE", mulai: "-", sisaHari: "-", status: "❌ Belum diminta" },
+  { kode: "6TBCZZ111", nama: "THICKNESS GAUGE", mulai: "2025-06-18", sisaHari: 3, status: "⏳ Dalam proses" }
+];
+
+// Fungsi bantu
+function getStatusLabel(nextDue) {
+  const today = new Date();
+  const due = new Date(nextDue);
+  const diff = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+
+  if (diff < 0) return { label: "🔴 Jatuh Tempo", color: "#d62839" };
+  if (diff === 0) return { label: "🟡 Hari H Kalibrasi", color: "#f9a825" };
+  if (diff <= 7) return { label: "🟡 Segera Kalibrasi", color: "#fbc02d" };
+  if (diff <= 30) return { label: "🟡 Mendekati", color: "#ffdd57" };
+  return { label: "🔵 Aman", color: "#0077b6" };
+}
+
+function getKeteranganWaktu(nextDue) {
+  const today = new Date();
+  const due = new Date(nextDue);
+  const diff = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+
+  if (diff < 0) return `${Math.abs(diff)} hari lalu`;
+  if (diff === 0) return `Hari ini`;
+  return `${diff} hari lagi`;
+}
+
+// Render tabel jadwal kalibrasi (maksimal 5 baris)
+const jadwalBody = document.querySelector("#jadwalKalibrasiTable tbody");
+jadwalKalibrasi.slice(0, 5).forEach(item => {
+  const status = getStatusLabel(item.nextDue);
+  const keterangan = getKeteranganWaktu(item.nextDue);
+
   const row = document.createElement("tr");
   row.innerHTML = `
-    <td>${alat.kode}</td>
-    <td>${alat.nama}</td>
-    <td>${alat.nextDue}</td>
+    <td>${item.kode}</td>
+    <td>${item.nama}</td>
+    <td>${item.nextDue}</td>
+    <td style="color:${status.color}; font-weight: bold;">${status.label}</td>
+    <td><i>${keterangan}</i></td>
   `;
-  tableAll.appendChild(row);
+  jadwalBody.appendChild(row);
 });
 
-// ===============================
-// Tampilkan 5 alat terdekat ke tabel "Kalibrasi Terdekat"
-const sortedAlat = [...alatKalibrasi].sort((a, b) => new Date(a.nextDue) - new Date(b.nextDue));
-const top5 = sortedAlat.slice(0, 5);
+// Render tabel status proses kalibrasi (maksimal 5 baris)
+const statusBody = document.querySelector("#statusKalibrasiTable tbody");
+statusKalibrasi.slice(0, 5).forEach(item => {
+  const lama = item.sisaHari !== "-" ? `${item.sisaHari} hari lagi selesai` : "-";
 
-const tableTerdekat = document.querySelector("#tabelTerdekat tbody");
-top5.forEach(alat => {
   const row = document.createElement("tr");
   row.innerHTML = `
-    <td>${alat.kode}</td>
-    <td>${alat.nama}</td>
-    <td>${alat.nextDue}</td>
+    <td>${item.kode}</td>
+    <td>${item.nama}</td>
+    <td>${item.mulai}</td>
+    <td>${lama}</td>
+    <td>${item.status}</td>
   `;
-  tableTerdekat.appendChild(row);
+  statusBody.appendChild(row);
+
+  document.addEventListener("DOMContentLoaded", () => {
+  const ctx = document.getElementById('grafikKalibrasi').getContext('2d');
+
+    // Contoh data dummy: jumlah alat dikalibrasi per minggu
+    const grafik = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+        datasets: [{
+          label: 'Alat Dikalibrasi',
+          data: [2, 4, 3, 5], // Ganti dengan data asli jika tersedia
+          backgroundColor: '#00b4d8'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  });
+
 });

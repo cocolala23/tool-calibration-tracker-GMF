@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard Kalibrasi</title>
   <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -13,73 +14,60 @@
     <div class="navbar-left">
       <h2>Dashboard</h2>
     </div>
-
-    <!-- Gambar Tengah Navbar -->
     <div class="navbar-center">
       <img src="../gambar/logo.png" alt="Logo" class="navbar-logo" />
     </div>
-    
     <div class="navbar-right">
-      <a href="../html/alat.html" class="btn-tambah-alat">➕ Tambah Tools</a>
-      <div class="user-dropdown">
-        <span id="loggedInUser" class="username-display">Pengguna</span>
-        <div class="dropdown-content" id="userDropdown">
-          <a href="../html/profile.html" id="editProfileBtn">✏️ Edit Profil</a>
-          <a href="#" id="logoutBtn">🔒 Logout</a>
+      <div class="nav-right-group">
+        <a href="../html/alat.html" class="nav-tools-link">Tools</a>
+        <div class="vertical-divider"></div>
+        <div class="user-dropdown">
+          <span id="loggedInUser" class="username-display">Pengguna</span>
+          <div class="dropdown-content" id="userDropdown">
+            <a href="../html/profile.html" id="editProfileBtn">✏️ Edit Profil</a>
+            <a href="#" id="logoutBtn">🔒 Logout</a>
+          </div>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Konten Utama Dashboard -->
+  <!-- Konten Dashboard -->
   <main class="dashboard-content">
-    <h3>Kalibrasi Terdekat</h3>
-    <p>Berikut adalah 5 alat dengan tanggal kalibrasi terdekat:</p>
+    <h3>Grafik Kalibrasi Alat Bulan Ini</h3>
+    <div class="chart-container" style="width: 100%; max-width: 600px; margin-bottom: 2em;">
+      <canvas id="grafikKalibrasi"></canvas>
+    </div>
+
+    <h3>Jadwal Kalibrasi Alat</h3>
     <div class="table-section">
-      <table id="tabelTerdekat">
+      <table id="jadwalKalibrasiTable">
         <thead>
           <tr>
             <th>Kode Alat</th>
             <th>Nama Alat</th>
             <th>Next Due</th>
+            <th>Status</th>
+            <th>Keterangan Waktu</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Diisi via JS -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
 
-    <h3>Pantau kapan tools harus dikalibrasi</h3>
-    <p>Data tools yang harus dikalibrasi</p>
-    <div class="table-section">
-      <table id="alatTable">
-        <thead>
-          <tr>
-            <th>Kode Alat</th>
-            <th>Nama Alat</th>
-            <th>Next Due</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data alat dimuat via JS -->
-        </tbody>
-      </table>
-    </div>
-
-    <p>Data tools yang telah jatuh tempo</p>
+    <h3>Status Proses Kalibrasi</h3>
     <div class="table-section2">
-      <table id="alatTable2">
+      <table id="statusKalibrasiTable">
         <thead>
           <tr>
             <th>Kode Alat</th>
             <th>Nama Alat</th>
-            <th>Next Due</th>
+            <th>Tanggal Mulai Kalibrasi</th>
+            <th>Lama Waktu Kalibrasi</th>
+            <th>Status Proses</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Data alat dimuat via JS -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
   </main>
