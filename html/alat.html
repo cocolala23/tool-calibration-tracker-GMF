@@ -7,190 +7,113 @@
   <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
+
   <!-- Navbar -->
-   
   <nav class="navbar">
-        <div class="navbar-center">
+    <div class="navbar-left">
+      <h2>Tools</h2>
+    </div>
+    <div class="navbar-center">
       <img src="../gambar/logo.png" alt="Logo" class="navbar-logo" />
     </div>
-    
-    <div class="navbar-left">
-      <h2>Sistem Kalibrasi</h2>
-    </div>
     <div class="navbar-right">
-      <a href="../html/index.html" id="logoutBtn</a>
-      <button onclick="logout()" class="btn-logout">🔒 Logout</button>
-
-    <div class="user-dropdown">
+      <a href="dashboard.html" class="nav-tools-link">Dashboard</a>
+      <div class="vertical-divider"></div>
+      <div class="user-dropdown">
         <span id="loggedInUser" class="username-display">Pengguna</span>
         <div class="dropdown-content" id="userDropdown">
-          <a href="../html/profile.html" id="editProfileBtn">✏️ Edit Profil</a>
+          <a href="profile.html" id="editProfileBtn">✏️ Edit Profil</a>
           <a href="#" id="logoutBtn">🔒 Logout</a>
         </div>
-
       </div>
     </div>
   </nav>
 
+  <!-- Notifikasi -->
+  <div class="notification" id="notificationBox"></div>
+
   <!-- Konten Utama -->
   <main class="dashboard-content container">
-    <h3>Manajemen Alat</h3>
-
-    <div class="summary">
-      <strong>Total Alat:</strong> <span id="totalAlat">0</span>
+    <div class="toolbar">
+      <button id="btnTambahAlat" class="btn-tambah">➕ Tambah Alat</button>
+      <input type="text" id="searchInput" placeholder="Cari alat..." class="search-bar" />
     </div>
 
-    <!-- Form Tambah Alat -->
-    <form id="alatForm">
-      <label for="registration">Registration:</label>
-      <input type="text" id="registration" required>
-
-      <label for="description">Description:</label>
-      <input type="text" id="description" required>
-
-      <label for="model">Model:</label>
-      <input type="text" id="model">
-
-      <label for="pn">P/N:</label>
-      <input type="text" id="pn">
-
-      <label for="sn">S/N:</label>
-      <input type="text" id="sn">
-
-      <label for="unit">Unit:</label>
-      <input type="text" id="unit">
-
-      <label for="unitDesc">Unit Desc:</label>
-      <input type="text" id="unitDesc">
-
-      <label for="location">Location:</label>
-      <input type="text" id="location">
-
-      <label for="nextDue">Next Due:</label>
-      <input type="date" id="nextDue" required>
-
-      <button type="submit">Simpan</button>
-    </form>
-
-    <!-- Tabel Daftar Alat -->
-    <table id="alatTable">
-      <thead>
-        <tr>
-          <th>Registration</th>
-          <th>Description</th>
-          <th>Model</th>
-          <th>P/N</th>
-          <th>S/N</th>
-          <th>Unit</th>
-          <th>Unit Desc</th>
-          <th>Location</th>
-          <th>Next Due</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="table-section">
+      <table id="alatTable">
+        <thead>
+          <tr>
+            <th>Registration</th>
+            <th>Description</th>
+            <th>Model</th>
+            <th>P/N</th>
+            <th>S/N</th>
+            <th>Unit</th>
+            <th>Unit Desc</th>
+            <th>Location</th>
+            <th>Next Due</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="10" style="text-align:right; font-weight:bold">
+              Total Alat: <span id="totalAlat">0</span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="pagination" id="pagination"></div>
+    </div>
   </main>
 
-  <!-- Script Logic -->
-  <script>
-    // Cek login
-    if (!localStorage.getItem("isLoggedIn")) {
-      window.location.href = "../index.html";
-    }
-    
-    // Ambil username dari localStorage setelah login
-const loggedInUser = localStorage.getItem("loggedInUser");
+  <!-- Modal Tambah Alat -->
+  <div class="modal hidden" id="alatModal">
+    <div class="modal-content scrollable">
+      <h3 id="modalTitle">Tambah Alat</h3>
+      <form id="alatForm">
+        <input type="text" id="registration" placeholder="Registration" required>
+        <input type="text" id="description" placeholder="Description" required>
+        <input type="text" id="model" placeholder="Model">
+        <input type="text" id="pn" placeholder="P/N">
+        <input type="text" id="sn" placeholder="S/N">
+        <input type="text" id="unit" placeholder="Unit">
+        <input type="text" id="unitDesc" placeholder="Unit Desc">
+        <input type="text" id="location" placeholder="Location">
+        <input type="date" id="nextDue" required>
+        <div class="modal-actions">
+          <button type="submit">Simpan</button>
+          <button type="button" id="batalBtn" class="btn-cancel">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-// Jika belum login, arahkan ke login
-if (!loggedInUser) {
-  alert("❗ Anda harus login terlebih dahulu.");
-  window.location.href = "index.html";
-}
+  <!-- Modal Edit Alat -->
+  <div class="modal hidden" id="editModal">
+    <div class="modal-content scrollable">
+      <h3>Edit Alat</h3>
+      <form id="editForm">
+        <input type="text" id="editRegistration" placeholder="Registration" required>
+        <input type="text" id="editDescription" placeholder="Description" required>
+        <input type="text" id="editModel" placeholder="Model">
+        <input type="text" id="editPn" placeholder="P/N">
+        <input type="text" id="editSn" placeholder="S/N">
+        <input type="text" id="editUnit" placeholder="Unit">
+        <input type="text" id="editUnitDesc" placeholder="Unit Desc">
+        <input type="text" id="editLocation" placeholder="Location">
+        <input type="date" id="editNextDue" required>
+        <div class="modal-actions">
+          <button type="submit">Simpan Perubahan</button>
+          <button type="button" id="cancelEditBtn" class="btn-cancel">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-// Tampilkan username
-document.getElementById("loggedInUser").textContent = loggedInUser;
+  <!-- JS -->
+  <script src="../js/alat.js"></script>
 
-// Toggle dropdown saat klik username
-document.getElementById("loggedInUser").addEventListener("click", () => {
-  const dropdown = document.getElementById("userDropdown");
-  dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-});
-
-// Logout
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("loggedInUser");
-  window.location.href = "index.html";
-});
-    document.getElementById("editProfileBtn").addEventListener("click", () => {
-  window.location.href = "edit-profile.html";
-});
-
-    function logout() {
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("loggedInUser");
-      window.location.href = "../index.html";
-    }
-
-    const form = document.getElementById("alatForm");
-    const tableBody = document.querySelector("#alatTable tbody");
-    const totalAlatDisplay = document.getElementById("totalAlat");
-    let alatList = JSON.parse(localStorage.getItem("alatList")) || [];
-
-    function updateTotal() {
-      totalAlatDisplay.textContent = alatList.length;
-    }
-
-    function tampilkanAlat() {
-      tableBody.innerHTML = "";
-      alatList.forEach((alat, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${alat.registration}</td>
-          <td>${alat.description}</td>
-          <td>${alat.model}</td>
-          <td>${alat.pn}</td>
-          <td>${alat.sn}</td>
-          <td>${alat.unit}</td>
-          <td>${alat.unitDesc}</td>
-          <td>${alat.location}</td>
-          <td>${alat.nextDue}</td>
-          <td><button onclick="hapusAlat(${index})">Hapus</button></td>
-        `;
-        tableBody.appendChild(row);
-      });
-      updateTotal();
-    }
-
-    function hapusAlat(index) {
-      if (confirm("Yakin ingin menghapus alat ini?")) {
-        alatList.splice(index, 1);
-        localStorage.setItem("alatList", JSON.stringify(alatList));
-        tampilkanAlat();
-      }
-    }
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const alat = {
-        registration: document.getElementById("registration").value,
-        description: document.getElementById("description").value,
-        model: document.getElementById("model").value,
-        pn: document.getElementById("pn").value,
-        sn: document.getElementById("sn").value,
-        unit: document.getElementById("unit").value,
-        unitDesc: document.getElementById("unitDesc").value,
-        location: document.getElementById("location").value,
-        nextDue: document.getElementById("nextDue").value
-      };
-      alatList.push(alat);
-      localStorage.setItem("alatList", JSON.stringify(alatList));
-      tampilkanAlat();
-      form.reset();
-    });
-
-    // Inisialisasi data saat halaman dimuat
-    tampilkanAlat();
-  </script>
 </body>
 </html>

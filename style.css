@@ -25,6 +25,12 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1em; /* atau gunakan margin jika tidak ingin pakai gap */
+}
+
 .alat-nav {
   color: white;
   font-size: 1.2em;
@@ -490,3 +496,178 @@ button#deleteAccountBtn:hover {
 .modal-actions button:hover {
   background-color: #0096c7;
 }
+
+/* search tools */
+.search-bar {
+  margin: 1.5em 0;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.8em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+
+/* Pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 1em;
+  gap: 0.5em;
+}
+
+.pagination-controls button {
+  background-color: #0077b6;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.pagination-controls button.active,
+.pagination-controls button:hover {
+  background-color: #0096c7;
+}
+
+/* Toolbar atas tabel */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.search-bar {
+  width: 180px;
+  padding: 0.5em;
+  font-size: 0.9em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-tambah {
+  background-color: #0077b6;
+  color: white;
+  padding: 0.6em 1em;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-tambah:hover {
+  background-color: #0096c7;
+}
+
+/* Popup Modal: Ukuran dan Scroll */
+/* Notifikasi */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.4s ease;
+  z-index: 2000;
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Modal Popup */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.modal-content input {
+  margin-bottom: 0.8em;
+  width: 100%;
+  padding: 0.6em;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+}
+.btn-cancel {
+  background-color: #ccc;
+  color: black;
+  padding: 0.6em 1em;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-cancel:hover {
+  background-color: #bbb;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 1em;
+  text-align: center;
+}
+.pagination button {
+  margin: 0 4px;
+  padding: 0.4em 0.8em;
+  border-radius: 5px;
+  border: none;
+  background-color: #90e0ef;
+  color: #03045e;
+  cursor: pointer;
+  font-weight: bold;
+}
+.pagination button.active {
+  background-color: #0077b6;
+  color: white;
+}
+.pagination button:hover {
+  background-color: #48cae4;
+}
+
+
