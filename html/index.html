@@ -3,51 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login Operator</title>
+  <title>Login</title>
   <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
-
   <div class="login-container">
-<form action="login.php" method="post">
-    <h1>Login Operator</h1>
-    <form id="loginForm" autocomplete="off">
+    <form id="loginForm" autocomplete="off"> <!-- ✅ Perbaikan: gunakan 1 form saja tanpa action -->
+      <h1>Login Operator</h1>
+
       <label for="username">Username</label>
-      <input type="text" id="username" name="username" autocomplete="off" required>
+      <input type="text" id="username" name="username" autocomplete="off" required />
 
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" autocomplete="new-password" required>
+      <input type="password" id="password" name="password" autocomplete="new-password" required />
 
       <button type="submit">Login</button>
-
-      <!-- Pesan error -->
-      <div id="errorMsg" class="error"></div>
+      <div id="errorMsg" class="error"></div> <!-- ✅ Menampilkan error jika login gagal -->
     </form>
 
     <div class="register-link">
-      Belum punya akun? <a href="../html/register.html">Buat akun</a>
+      <p>Belum punya akun? <a href="register.html">Daftar di sini</a></p>
     </div>
   </div>
 
-  <!-- Script Login -->
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
-
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      const user = users.find(u => u.username === username && u.password === password);
-
-      if (user) {
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("loggedInUser", username);
-        window.location.href = "dashboard.html";
-      } else {
-        document.getElementById("errorMsg").textContent = "Username atau password salah.";
-      }
-    });
-  </script>
-
+  <script src="../js/login.js"></script>
 </body>
 </html>

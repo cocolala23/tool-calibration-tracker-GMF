@@ -3,39 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edit Profil</title>
+  <title>Profil Pengguna</title>
   <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
+
+  <!-- Navbar -->
   <nav class="navbar">
-        <div class="navbar-center">
+    <div class="navbar-left">
+      <h2>Profil</h2>
+    </div>
+
+    <div class="navbar-center">
       <img src="../gambar/logo.png" alt="Logo" class="navbar-logo" />
     </div>
-    
- <div class="navbar-left">
-    <h2>Edit Profile</h2>
-    <h2 id="usernameDisplay"></h2>
-  </div>
+
+    <div class="nav-right-group">
+      <a href="dashboard.html" class="nav-tools-link">Dashboard</a>
+      <a href="alat.html" class="nav-tools-link">Tools</a>
+    </div>
   </nav>
 
+  <!-- Konten Profil -->
   <div class="container">
-    <h2>Ubah Data Akun</h2>
-    <form id="editForm">
-      <label for="editUsername">Username</label>
-      <input type="text" id="editUsername" required />
-      <div class="error-field" id="errorUsername"></div>
+    <h2>Data Akun</h2>
+    <div class="info-board">
+      <ul>
+        <li><strong>ID Pegawai:</strong> <span id="displayId">-</span></li>
+        <li><strong>Username:</strong> <span id="displayUsername">-</span></li>
+        <li><strong>Nomor HP:</strong> <span id="displayPhone">-</span></li>
+        <li><strong>Level Jabatan:</strong> <span id="displayLevel">-</span></li>
+        <li><strong>Password:</strong> <span id="displayPassword">********</span></li>
+      </ul>
+    </div>
 
-      <label for="editPhone">Nomor HP</label>
-      <input type="text" id="editPhone" required />
-      <div class="error-field" id="errorPhone"></div>
-
-      <label for="editPassword">Password</label>
-      <input type="password" id="editPassword" required />
-      <div class="error-field" id="errorPassword"></div>
-
-      <button type="submit">💾 Simpan Perubahan</button>
-      <button type="button" id="deleteAccountBtn">🗑 Hapus Akun</button>
-    </form>
+    <div class="modal-actions" style="justify-content: flex-start; gap: 10px; margin-top: 1.5em;">
+      <a href="edit-profil.html">
+        <button class="btn-edit-small">✏️ Edit Profil</button>
+      </a>
+      <button id="deleteAccountBtn" class="btn-cancel">🗑 Hapus Akun</button>
+    </div>
   </div>
 
   <!-- Popup -->
@@ -43,10 +50,10 @@
     <div class="popup-content" id="popup-message"></div>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal Konfirmasi -->
   <div id="confirmModal" class="modal hidden">
     <div class="modal-content">
-      <p id="confirmMessage"></p>
+      <p id="confirmMessage">Yakin ingin menghapus akun Anda?</p>
       <div class="modal-actions">
         <button id="confirmYes">Ya</button>
         <button id="confirmNo">Tidak</button>
@@ -54,6 +61,6 @@
     </div>
   </div>
 
-  <script src="../js/profile.js"></script>
+  <script src="../js/profil.js"></script>
 </body>
 </html>

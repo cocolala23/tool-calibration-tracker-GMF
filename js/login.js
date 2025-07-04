@@ -1,22 +1,27 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("loginForm");
-  const passwordInput = document.getElementById("password");
+document.getElementById("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-  // Handle login submit
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = document.getElementById("username").value.trim();
-    const password = passwordInput.value;
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorMsg = document.getElementById("errorMsg");
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(u => u.username === username && u.password === password);
+  // Ambil daftar user dari localStorage
+  const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    if (user) {
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("loggedInUser", username);
-      window.location.href = "dashboard.html";
-    } else {
-      document.getElementById("errorMsg").textContent = "Username atau password salah.";
-    }
-  });
+  // Cari user yang sesuai
+  const user = users.find(u => u.username === username && u.password === password);
+
+  if (user) {
+    // ✅ Simpan info login
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("loggedInUser", username);
+    localStorage.setItem("currentUser", JSON.stringify(user)); // ✅ Supaya bisa dipakai di profil
+      
+    // Arahkan ke dashboard
+    window.location.href = "dashboard.html";
+  } else {
+    // ❌ Jika login gagal
+    errorMsg.textContent = "❗ Username atau password salah!";
+    errorMsg.style.color = "red";
+  }
 });

@@ -74,6 +74,7 @@ document.getElementById("registerForm").addEventListener("submit", function (e) 
     return;
   }
 
+  // Setelah akun berhasil dibuat:
   users.push({ id, username, password, phone, level });
   localStorage.setItem("users", JSON.stringify(users));
 

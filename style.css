@@ -670,4 +670,79 @@ button#deleteAccountBtn:hover {
   background-color: #48cae4;
 }
 
+/* ==========================
+   Halaman Profil Pengguna
+   ========================== */
+
+.info-board {
+  background-color: #e0f7fa;
+  padding: 1.5em;
+  border-left: 6px solid #00b4d8;
+  border-radius: 10px;
+  margin-top: 2em;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.info-board ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-board li {
+  padding: 0.5em 0;
+  font-size: 1em;
+  border-bottom: 1px solid #d0f0f8;
+}
+
+.info-board li:last-child {
+  border-bottom: none;
+}
+
+.info-board strong {
+  display: inline-block;
+  width: 150px;
+  color: #03045e;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1em;
+  margin-top: 2em;
+  justify-content: flex-start;
+}
+
+/* Tombol edit profil */
+.btn-edit-small {
+  background-color: #0077b6;
+  color: white;
+  padding: 0.6em 1.2em;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-edit-small:hover {
+  background-color: #0096c7;
+}
+
+/* Tombol hapus akun (reuse) */
+#deleteAccountBtn {
+  background-color: #d62839;
+  color: white;
+  padding: 0.6em 1.2em;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+#deleteAccountBtn:hover {
+  background-color: #ba1c2f;
+}
+
 
