@@ -2,12 +2,11 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manajemen Alat</title>
   <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
-
   <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-left">
@@ -29,7 +28,6 @@
     </div>
   </nav>
 
-  <!-- Notifikasi -->
   <div class="notification" id="notificationBox"></div>
 
   <!-- Konten Utama -->
@@ -52,13 +50,17 @@
             <th>Unit Desc</th>
             <th>Location</th>
             <th>Next Due</th>
+            <th>Tenggat Waktu</th>
+            <th>Status Proses</th>
+            <th>Lama Kalibrasi</th>
+            <th>Tanggal Selesai</th>
             <th>Aksi</th>
           </tr>
         </thead>
         <tbody></tbody>
         <tfoot>
           <tr>
-            <td colspan="10" style="text-align:right; font-weight:bold">
+            <td colspan="14" style="text-align:right; font-weight:bold">
               Total Alat: <span id="totalAlat">0</span>
             </td>
           </tr>
@@ -112,8 +114,26 @@
     </div>
   </div>
 
-  <!-- JS -->
-  <script src="../js/alat.js"></script>
+  <!-- Modal Kalibrasi -->
+  <div class="modal hidden" id="kalibrasiModal">
+    <div class="modal-content scrollable">
+      <h3>Kalibrasi Alat</h3>
+      <form id="kalibrasiForm">
+        <label for="kalMulai">Tanggal Mulai Kalibrasi</label>
+        <input type="date" id="kalMulai" required>
 
+        <label for="kalSelesai">Tanggal Selesai Kalibrasi</label>
+        <input type="date" id="kalSelesai" required>
+
+        <div class="modal-actions">
+          <button type="submit">Simpan</button>
+          <button type="button" id="batalKalibrasiBtn" class="btn-cancel">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="../js/alat.js"></script>
 </body>
 </html>

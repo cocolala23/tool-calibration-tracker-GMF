@@ -1,84 +1,80 @@
+// === KONSTANTA DAN VARIABEL ===
 const alatListKey = "alatList";
 let alatList = JSON.parse(localStorage.getItem(alatListKey)) || [];
 let currentEditIndex = null;
-const itemsPerPage = 15;
+let indexKalibrasi = null;
+const itemsPerPage = 10;
 let currentPage = 1;
 
-// DOM Elements
+// === ELEMENT DOM ===
 const tableBody = document.querySelector("#alatTable tbody");
-const searchInput = document.getElementById("searchInput");
 const totalDisplay = document.getElementById("totalAlat");
+const searchInput = document.getElementById("searchInput");
 const pagination = document.getElementById("pagination");
 
-const modal = document.getElementById("alatModal");
-const modalTitle = document.getElementById("modalTitle");
 const alatForm = document.getElementById("alatForm");
-const batalBtn = document.getElementById("batalBtn");
-
-const editModal = document.getElementById("editModal");
 const editForm = document.getElementById("editForm");
-const cancelEditBtn = document.getElementById("cancelEditBtn");
+const kalibrasiForm = document.getElementById("kalibrasiForm");
+const modalTambah = document.getElementById("alatModal");
+const modalEdit = document.getElementById("editModal");
+const modalKalibrasi = document.getElementById("kalibrasiModal");
 
-const notificationBox = document.getElementById("notificationBox");
-const loggedInUser = localStorage.getItem("loggedInUser");
-const loggedInUserSpan = document.getElementById("loggedInUser");
-const userDropdown = document.getElementById("userDropdown");
-const logoutBtn = document.getElementById("logoutBtn");
-const editProfileBtn = document.getElementById("editProfileBtn");
+const batalTambahBtn = document.getElementById("batalBtn");
+const batalEditBtn = document.getElementById("cancelEditBtn");
+const batalKalibrasiBtn = document.getElementById("batalKalibrasiBtn");
 
-// 1. Cek Login
-if (!loggedInUser) {
-  alert("❗ Anda harus login terlebih dahulu.");
-  window.location.href = "index.html";
-} else {
-  loggedInUserSpan.textContent = loggedInUser;
+// === UTILITY ===
+function hitungTenggat(nextDue) {
+  const now = new Date();
+  const due = new Date(nextDue);
+  const selisih = (due - now) / (1000 * 60 * 60 * 24); // dalam hari
+
+  if (selisih > 30) {
+    return `${Math.ceil(selisih / 30)} bulan lagi`;
+  } else if (selisih > 7) {
+    return `${Math.ceil(selisih / 7)} minggu lagi`;
+  } else if (selisih > 0) {
+    return `${Math.ceil(selisih)} hari lagi`;
+  } else {
+    return `❗ Lewat tenggat`;
+  }
 }
 
-// 2. Toggle dropdown user
-loggedInUserSpan.addEventListener("click", () => {
-  userDropdown.style.display = userDropdown.style.display === "block" ? "none" : "block";
-});
+function hitungLamaKalibrasi(mulai, selesai) {
+  const t1 = new Date(mulai);
+  const t2 = new Date(selesai);
+  const diffMs = t2 - t1;
+  const hari = diffMs / (1000 * 60 * 60 * 24);
+  return `${Math.ceil(hari)} hari`;
+}
 
-// 3. Logout
-logoutBtn.addEventListener("click", () => {
+function showModal(modal) {
+  modal.classList.remove("hidden");
+}
+function hideModal(modal) {
+  modal.classList.add("hidden");
+}
+
+// === TOMBOL TAMBAH ALAT ===
+document.getElementById("btnTambahAlat").addEventListener("click", () => {
+  alatForm.reset();
+  showModal(modalTambah);
+});
+batalTambahBtn.addEventListener("click", () => hideModal(modalTambah));
+batalEditBtn.addEventListener("click", () => hideModal(modalEdit));
+batalKalibrasiBtn.addEventListener("click", () => hideModal(modalKalibrasi));
+
+// === TOMBOL LOGOUT ===
+document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("loggedInUser");
   window.location.href = "index.html";
 });
 
-editProfileBtn.addEventListener("click", () => {
-  window.location.href = "profile.html";
-});
+document.getElementById("loggedInUser").textContent = localStorage.getItem("loggedInUser") || "Pengguna";
 
-// 🔔 Notifikasi
-function showNotification(message, color = "#0077b6") {
-  notificationBox.textContent = message;
-  notificationBox.style.backgroundColor = color;
-  notificationBox.classList.add("show");
-
-  setTimeout(() => {
-    notificationBox.classList.remove("show");
-  }, 2500);
-}
-
-// MODAL: Tambah Alat
-document.getElementById("btnTambahAlat").addEventListener("click", () => {
-  alatForm.reset();
-  modal.classList.remove("hidden");
-});
-
-batalBtn.addEventListener("click", () => {
-  modal.classList.add("hidden");
-});
-
-// MODAL: Edit Alat
-cancelEditBtn.addEventListener("click", () => {
-  editModal.classList.add("hidden");
-});
-
-// Submit Tambah Alat
-alatForm.addEventListener("submit", function (e) {
+// === TAMBAH ALAT ===
+alatForm.addEventListener("submit", (e) => {
   e.preventDefault();
-
   const alat = {
     registration: document.getElementById("registration").value,
     description: document.getElementById("description").value,
@@ -89,29 +85,29 @@ alatForm.addEventListener("submit", function (e) {
     unitDesc: document.getElementById("unitDesc").value,
     location: document.getElementById("location").value,
     nextDue: document.getElementById("nextDue").value,
+    status: "-",
+    lamaKalibrasi: "-",
+    tanggalSelesai: "-",
   };
-
   alatList.push(alat);
   localStorage.setItem(alatListKey, JSON.stringify(alatList));
-  showNotification("✅ Alat berhasil ditambahkan!");
-  modal.classList.add("hidden");
   renderTable();
+  hideModal(modalTambah);
 });
 
-// Tampilkan Tabel
+// === RENDER TABEL ===
 function renderTable() {
   const keyword = searchInput.value.toLowerCase();
-  const filtered = alatList.filter((alat) =>
-    Object.values(alat).some((val) => val.toLowerCase().includes(keyword))
+  const filtered = alatList.filter(alat =>
+    Object.values(alat).some(val => val && val.toLowerCase().includes(keyword))
   );
-
   const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const currentData = filtered.slice(start, end);
-
+  const currentData = filtered.slice(start, start + itemsPerPage);
   tableBody.innerHTML = "";
+
   currentData.forEach((alat, index) => {
-    const realIndex = alatList.indexOf(alat); // Index dari array utama
+    const tenggat = (alat.status === "Proses") ? "-" : hitungTenggat(alat.nextDue);
+    const nextDue = (alat.status === "Proses") ? "-" : alat.nextDue;
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${alat.registration}</td>
@@ -122,37 +118,52 @@ function renderTable() {
       <td>${alat.unit}</td>
       <td>${alat.unitDesc}</td>
       <td>${alat.location}</td>
-      <td>${alat.nextDue}</td>
+      <td>${nextDue}</td>
+      <td>${tenggat}</td>
+      <td>${alat.status || "-"}</td>
+      <td>${alat.lamaKalibrasi || "-"}</td>
+      <td>${alat.tanggalSelesai || "-"}</td>
       <td>
-        <button class="action-btn edit-btn" onclick="editAlat(${realIndex})">Edit</button>
-        <button class="action-btn delete-btn" onclick="deleteAlat(${realIndex})">Hapus</button>
+        <button onclick="editAlat(${index})">Edit</button>
+        <button onclick="hapusAlat(${index})">Hapus</button>
+        ${alat.status === "Proses" || alat.status === "Selesai" ? "" : `<button onclick="openKalibrasi(${index})">Kalibrasi</button>`}
       </td>
     `;
     tableBody.appendChild(row);
   });
-
   totalDisplay.textContent = alatList.length;
   renderPagination(filtered.length);
 }
 
-// Pagination
-function renderPagination(totalItems) {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  pagination.innerHTML = "";
-
-  for (let i = 1; i <= totalPages; i++) {
-    const btn = document.createElement("button");
-    btn.textContent = i;
-    if (i === currentPage) btn.classList.add("active");
-    btn.addEventListener("click", () => {
-      currentPage = i;
-      renderTable();
-    });
-    pagination.appendChild(btn);
-  }
+// === KALIBRASI ===
+function openKalibrasi(index) {
+  indexKalibrasi = index;
+  kalibrasiForm.reset();
+  showModal(modalKalibrasi);
 }
 
-// Edit Alat
+kalibrasiForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const mulai = document.getElementById("kalMulai").value;
+  const selesai = document.getElementById("kalSelesai").value;
+
+  if (!mulai || !selesai || new Date(mulai) > new Date(selesai)) {
+    alert("Tanggal tidak valid!");
+    return;
+  }
+
+  const lama = hitungLamaKalibrasi(mulai, selesai);
+  alatList[indexKalibrasi].status = "Proses";
+  alatList[indexKalibrasi].nextDue = "-";
+  alatList[indexKalibrasi].lamaKalibrasi = lama;
+  alatList[indexKalibrasi].tanggalSelesai = selesai;
+
+  localStorage.setItem(alatListKey, JSON.stringify(alatList));
+  renderTable();
+  hideModal(modalKalibrasi);
+});
+
+// === EDIT ALAT ===
 function editAlat(index) {
   currentEditIndex = index;
   const alat = alatList[index];
@@ -167,48 +178,60 @@ function editAlat(index) {
   document.getElementById("editLocation").value = alat.location;
   document.getElementById("editNextDue").value = alat.nextDue;
 
-  editModal.classList.remove("hidden");
+  showModal(modalEdit);
 }
 
-// Simpan Edit
-editForm.addEventListener("submit", function (e) {
+editForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   if (currentEditIndex !== null) {
-    alatList[currentEditIndex] = {
-      registration: document.getElementById("editRegistration").value,
-      description: document.getElementById("editDescription").value,
-      model: document.getElementById("editModel").value,
-      pn: document.getElementById("editPn").value,
-      sn: document.getElementById("editSn").value,
-      unit: document.getElementById("editUnit").value,
-      unitDesc: document.getElementById("editUnitDesc").value,
-      location: document.getElementById("editLocation").value,
-      nextDue: document.getElementById("editNextDue").value,
-    };
+    const alat = alatList[currentEditIndex];
+    alat.registration = document.getElementById("editRegistration").value;
+    alat.description = document.getElementById("editDescription").value;
+    alat.model = document.getElementById("editModel").value;
+    alat.pn = document.getElementById("editPn").value;
+    alat.sn = document.getElementById("editSn").value;
+    alat.unit = document.getElementById("editUnit").value;
+    alat.unitDesc = document.getElementById("editUnitDesc").value;
+    alat.location = document.getElementById("editLocation").value;
+    alat.nextDue = document.getElementById("editNextDue").value;
 
     localStorage.setItem(alatListKey, JSON.stringify(alatList));
-    showNotification("✏️ Data alat berhasil diperbarui!", "#f9a826");
-    editModal.classList.add("hidden");
     renderTable();
+    hideModal(modalEdit);
   }
 });
 
-// Hapus Alat
-function deleteAlat(index) {
-  if (confirm("Yakin ingin menghapus alat ini?")) {
+// === HAPUS ===
+function hapusAlat(index) {
+  if (confirm("Hapus alat ini?")) {
     alatList.splice(index, 1);
     localStorage.setItem(alatListKey, JSON.stringify(alatList));
-    showNotification("🗑️ Alat berhasil dihapus!", "#ef476f");
     renderTable();
   }
 }
 
-// Cari Alat
+// === PENCARIAN ===
 searchInput.addEventListener("input", () => {
   currentPage = 1;
   renderTable();
 });
 
-// Inisialisasi
+// === PAGINATION ===
+function renderPagination(totalItems) {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  pagination.innerHTML = "";
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    if (i === currentPage) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      currentPage = i;
+      renderTable();
+    });
+    pagination.appendChild(btn);
+  }
+}
+
+// === INISIALISASI ===
 renderTable();
