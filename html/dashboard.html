@@ -9,7 +9,6 @@
 </head>
 <body>
 
-  <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-left">
       <h2>Dashboard</h2>
@@ -32,43 +31,78 @@
     </div>
   </nav>
 
-  <!-- Konten Dashboard -->
-  <main class="dashboard-content">
-    <h3>Grafik Kalibrasi Alat Bulan Ini</h3>
-    <div class="chart-container" style="width: 100%; max-width: 600px; margin-bottom: 2em;">
-      <canvas id="grafikKalibrasi"></canvas>
+  <main class="dashboard-container">
+
+    <div class="stat-cards-grid">
+      <div class="stat-card">
+        <h3>Total Alat</h3>
+        <p id="statTotalAlat">0</p>
+        <div class="stat-card-icon icon-total">🧰</div>
+      </div>
+      <div class="stat-card">
+        <h3>Proses Kalibrasi</h3>
+        <p id="statProses">0</p>
+        <div class="stat-card-icon icon-proses">⚙️</div>
+      </div>
+      <div class="stat-card">
+        <h3>Segera Jatuh Tempo</h3>
+        <p id="statSegeraJatuhTempo">0</p>
+        <div class="stat-card-icon icon-segera">🟡</div>
+      </div>
+      <div class="stat-card">
+        <h3>Lewat Tenggat</h3>
+        <p id="statLewatTenggat">0</p>
+        <div class="stat-card-icon icon-lewat">🔴</div>
+      </div>
     </div>
 
-    <h3>Jadwal Kalibrasi Alat</h3>
-    <div class="table-section">
-      <table id="jadwalKalibrasiTable">
-        <thead>
-          <tr>
-            <th>Kode Alat</th>
-            <th>Nama Alat</th>
-            <th>Next Due</th>
-            <th>Status</th>
-            <th>Keterangan Waktu</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    <div class="main-grid">
+      <div class="card card-full">
+        <div class="card-header">
+          <h3>Alat Selesai Dikalibrasi (6 Bulan Terakhir)</h3>
+        </div>
+        <div class="chart-container">
+          <canvas id="grafikKalibrasi"></canvas>
+        </div>
+      </div>
 
-    <h3>Status Proses Kalibrasi</h3>
-    <div class="table-section2">
-      <table id="statusKalibrasiTable">
-        <thead>
-          <tr>
-            <th>Kode Alat</th>
-            <th>Nama Alat</th>
-            <th>Tanggal Mulai Kalibrasi</th>
-            <th>Lama Waktu Kalibrasi</th>
-            <th>Status Proses</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+      <div class="card">
+        <div class="card-header">
+          <h3>Jadwal Kalibrasi Terdekat</h3>
+          <a href="alat.html" class="card-link">Lihat Semua</a>
+        </div>
+        <div class="table-section">
+          <table id="jadwalKalibrasiTable">
+            <thead>
+              <tr>
+                <th>Nama Alat</th>
+                <th>Next Due</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Alat dalam Proses Kalibrasi</h3>
+          <a href="alat.html" class="card-link">Lihat Semua</a>
+        </div>
+        <div class="table-section">
+          <table id="statusKalibrasiTable">
+            <thead>
+              <tr>
+                <th>Nama Alat</th>
+                <th>Estimasi Selesai</th>
+                <th>Sisa Waktu</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </main>
 
