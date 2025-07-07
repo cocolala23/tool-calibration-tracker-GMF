@@ -1,4 +1,8 @@
 /* General reset */
+html {
+  overflow-y: scroll;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -327,25 +331,56 @@ form button:hover {
 }
 
 /* Table Styles */
-table {
-  width: 100%;
-  border-collapse: collapse;
+/* =================================
+   DESAIN TABEL MODERN & TEGAS
+   ================================= */
+
+#alatTable {
+    width: 100%;
+    border-collapse: collapse; /* Menghilangkan jarak antar border */
+    font-size: 0.9em; /* Sedikit mengecilkan font agar muat lebih banyak */
 }
 
-table thead {
-  background-color: #0077b6;
-  color: white;
+/* Header Tabel */
+#alatTable thead tr {
+    background-color: #2c3e50; /* Warna gelap yang tegas */
+    color: #ffffff; /* Teks putih */
+    text-align: left;
+    font-weight: 600;
 }
 
-table th, table td {
-  padding: 0.75em;
-  border: 1px solid #ccc;
-  text-align: left;
+#alatTable th {
+    padding: 12px 15px;
+    text-transform: uppercase; /* Membuat teks header kapital */
+    letter-spacing: 0.5px;
 }
 
-table tr:nth-child(even) {
-  background-color: #f1f9ff;
-} 
+/* Body Tabel */
+#alatTable tbody tr {
+    border-bottom: 1px solid #eef2f5; /* Garis pemisah antar baris yang halus */
+    transition: background-color 0.2s ease;
+}
+
+/* Menghilangkan zebra-striping untuk tampilan lebih bersih */
+#alatTable tbody tr:nth-child(even) {
+    background-color: transparent; 
+}
+
+/* Efek hover pada baris */
+#alatTable tbody tr:hover {
+    background-color: #f5f8ff; /* Warna biru yang sangat pucat saat hover */
+}
+
+#alatTable td {
+    padding: 12px 15px;
+    vertical-align: middle; /* Memastikan konten sel berada di tengah secara vertikal */
+}
+
+/* Styling khusus untuk kolom pertama agar lebih menonjol */
+#alatTable td:first-child {
+    font-weight: 600;
+    color: #0077b6;
+}
 
 /* =================================
    STYLES LOGIN MODERN
@@ -442,7 +477,7 @@ body {
 
 .input-group .icon {
   position: absolute;
-  top: 50%;
+  top: 67%;
   right: 15px;
   transform: translateY(-50%);
   color: #aaa;
@@ -711,6 +746,8 @@ button#deleteAccountBtn:hover {
 .table-wrapper {
   overflow-x: auto;
   margin-bottom: 1em;
+  width: 100%;
+  padding-bottom: 5px;
 }
 
 /* Pagination */
@@ -737,36 +774,145 @@ button#deleteAccountBtn:hover {
   background-color: #0096c7;
 }
 
-/* Toolbar atas tabel */
-.toolbar {
+/* =================================
+   STYLES HALAMAN TOOLS MODERN
+   ================================= */
+
+/* Container Utama Konten */
+.content-container {
+  padding: 25px;
+  background-color: #f0f8ff;
+}
+
+.main-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden; /* Penting agar shadow terlihat rapi */
+}
+
+/* Header di dalam Kartu */
+.card-header-tools {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1em;
+  padding: 20px;
+  border-bottom: 1px solid #eef2f5;
 }
-
-.search-bar {
-  width: 180px;
-  padding: 0.5em;
-  font-size: 0.9em;
+.tools-title {
+  margin: 0;
+  font-size: 1.5em;
+  color: #03045e;
+}
+.tools-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.search-input-modern, .filter-select {
+  padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  font-size: 0.9em;
+  background-color: #f8f9fa;
 }
-
-.btn-tambah {
+.btn-primary {
   background-color: #0077b6;
   color: white;
-  padding: 0.6em 1em;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
+  padding: 8px 16px;
   border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.btn-primary:hover {
+  background-color: #005a8d;
 }
 
-.btn-tambah:hover {
-  background-color: #0096c7;
+/* Body Kartu (Tabel dan Konten Lainnya) */
+.card-body {
+  padding: 20px;
 }
 
+
+/* Status Badges */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.8em;
+  color: white;
+  text-align: center;
+}
+.status-standar { background-color: #6c757d; } /* Abu-abu */
+.status-proses { background-color: #0077b6; } /* Biru */
+.status-selesai { background-color: #2a9d8f; } /* Hijau */
+
+/* Tenggat Waktu */
+.tenggat-lewat { color: #d62839; font-weight: bold; }
+.tenggat-segera { color: #ff9f1c; font-weight: bold; }
+.tenggat-aman { color: #6c757d; }
+
+/* Tombol Aksi dengan Ikon */
+.kolom-aksi-modern {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: transform 0.2s;
+    padding: 5px;
+}
+.action-btn:hover {
+    transform: scale(1.2);
+}
+.edit-btn { color: #0077b6; }
+.delete-btn { color: #d62839; }
+.calibrate-btn { color: #52b788; }
+.complete-btn { color: #ff9f1c; }
+
+
+/* Pesan Data Kosong (Empty State) */
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+}
+.empty-state.hidden {
+  display: none;
+}
+.empty-state-img {
+  max-width: 150px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+.empty-state h3 {
+  font-size: 1.3em;
+  color: #333;
+}
+.empty-state p {
+  color: #777;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Kontrol Paginasi */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid #eef2f5;
+}
+#paginationInfo {
+    font-size: 0.9em;
+    color: #555;
+}
 /* Popup Modal: Ukuran dan Scroll */
 /* Notifikasi */
 .notification {
@@ -790,47 +936,144 @@ button#deleteAccountBtn:hover {
 }
 
 /* Modal Popup */
-
-.modal {
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.4);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.modal.hidden {
+.modal-overlay:not(.hidden) {
+  opacity: 1;
+}
+
+.modal-box {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 600px; /* Lebar default modal */
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay:not(.hidden) .modal-box {
+  transform: scale(1);
+}
+
+.modal-overlay.hidden {
   display: none;
 }
 
-.modal-content {
-  width: 90%;
-  max-width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  position: relative;
-}
-
-.modal-content input {
-  margin-bottom: 0.8em;
-  width: 100%;
-  padding: 0.6em;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-.modal-actions {
+.modal-header {
   display: flex;
   justify-content: space-between;
-  margin-top: 1em;
+  align-items: center;
+  padding: 15px 25px;
+  border-bottom: 1px solid #eef2f5;
 }
+
+.modal-title {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #03045e;
+  margin: 0;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  font-weight: 300;
+  color: #888;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 25px;
+  overflow-y: auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.modal-body input[type="text"],
+.modal-body input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95em;
+  box-sizing: border-box;
+}
+
+.form-group-date {
+  display: flex;
+  flex-direction: column;
+}
+.form-group-date label {
+  font-size: 0.9em;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group {
+    margin-bottom: 1em;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+.form-group input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95em;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px 25px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #eef2f5;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.btn-secondary {
+    background-color: #e9ecef;
+    color: #333;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.btn-secondary:hover {
+    background-color: #ced4da;
+}
+
 .btn-cancel {
   background-color: #ccc;
   color: black;
@@ -959,6 +1202,187 @@ button#deleteAccountBtn:hover {
 }
 .btn-aksi:hover {
   opacity: 0.85;
+}
+
+/* =================================
+   STYLES PROFIL MODERN (SIMPLE & ELEGAN)
+   ================================= */
+
+.profile-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Ganti ke flex-start agar kartu tidak meregang */
+  padding: 40px 20px;
+  background-color: #f0f8ff;
+  min-height: calc(100vh - 65px); /* Tinggi viewport dikurangi tinggi navbar */
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 700px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Penting untuk menjaga border-radius */
+}
+
+.profile-header {
+  text-align: center;
+  padding: 30px;
+  background: linear-gradient(135deg, #0077b6, #0096c7);
+  color: white;
+}
+
+.profile-avatar-large {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3em;
+  font-weight: 600;
+  margin: 0 auto 15px auto;
+  border: 4px solid white;
+}
+
+.profile-header h2 {
+  color: white;
+  margin: 0 0 5px 0;
+  font-size: 1.8em;
+}
+
+.profile-header p {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.profile-body {
+  padding: 30px;
+}
+
+.profile-body h3 {
+  font-size: 1.2em;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eef2f5;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item label {
+  font-size: 0.9em;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.info-item p {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.info-item-full {
+  grid-column: 1 / -1; /* Membuat item ini mengambil lebar penuh */
+}
+
+.password-profile-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#displayPassword {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1.1em;
+  background-color: #f8f9fa;
+  font-family: 'Poppins', sans-serif;
+  color: #343a40;
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.toggle-password-profile {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 6px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: #f8f9fa;
+}
+
+.profile-footer {
+  padding: 20px 30px;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  border-top: 1px solid #eef2f5;
+}
+
+/* Desain Baru untuk Modal Hapus */
+.modal-header-delete {
+  text-align: center;
+  padding-top: 20px;
+}
+.delete-icon {
+  font-size: 3em;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #feefee;
+  color: #d62839;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+.modal-title-delete {
+    font-size: 1.4em;
+    color: #333;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+.modal-footer-delete {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  padding: 25px;
+}
+
+/* =================================
+   PERBAIKAN IKON PASSWORD GANDA
+   ================================= */
+
+/* Menyembunyikan ikon "lihat password" bawaan dari browser Chrome, Edge, Safari */
+input[type="password"]::-webkit-password-reveal-button {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Menyembunyikan ikon "lihat password" bawaan dari browser Internet Explorer */
+input[type="password"]::-ms-reveal {
+  display: none;
 }
 
 .btn-edit { background-color: #0077b6; } /* Biru */

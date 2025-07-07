@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Profil Pengguna</title>
   <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <nav class="navbar-modern">
@@ -12,12 +15,10 @@
         <img src="../gambar/logo.png" alt="Logo" class="navbar-logo-modern" />
         <span class="navbar-title">Kalibrasi Alat</span>
     </div>
-
     <div class="navbar-links">
         <a href="dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a>
         <a href="alat.html" class="nav-link" id="nav-alat">Tools</a>
     </div>
-
     <div class="navbar-user-section">
         <div class="user-dropdown-modern">
             <div class="user-info" id="userDropdownTrigger">
@@ -26,55 +27,98 @@
                 <span class="dropdown-arrow">▼</span>
             </div>
             <div class="dropdown-content-modern" id="userDropdownContent">
-                <a href="profile.html">
-                    <span>👤</span> Profil Saya
-                </a>
+                <a href="profile.html"><span>👤</span> Profil Saya</a>
                 <div class="dropdown-divider"></div>
-                <a href="#" id="logoutBtn">
-                    <span>🔒</span> Logout
-                </a>
+                <a href="#" id="logoutBtn"><span>🔒</span> Logout</a>
             </div>
         </div>
     </div>
   </nav>
 
-  <!-- Konten Profil -->
-  <div class="container">
-    <h2>Data Akun</h2>
-    <div class="info-board">
-      <ul>
-        <li><strong>ID Pegawai:</strong> <span id="displayId">-</span></li>
-        <li><strong>Username:</strong> <span id="displayUsername">-</span></li>
-        <li><strong>Nomor HP:</strong> <span id="displayPhone">-</span></li>
-        <li><strong>Level Jabatan:</strong> <span id="displayLevel">-</span></li>
-        <li><strong>Password:</strong> <span id="displayPassword">********</span></li>
-      </ul>
-    </div>
+  <main class="profile-page-container">
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar-large" id="profileAvatar">P</div>
+        <h2 id="profileUsernameDisplay">Username Pengguna</h2>
+        <p id="profileIdDisplay">ID Pegawai: -</p>
+      </div>
 
-    <div class="modal-actions" style="justify-content: flex-start; gap: 10px; margin-top: 1.5em;">
-      <a href="edit-profil.html">
-        <button class="btn-edit-small">✏️ Edit Profil</button>
-      </a>
-      <button id="deleteAccountBtn" class="btn-cancel">🗑 Hapus Akun</button>
+      <div class="profile-body">
+        <h3>Informasi Akun</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Username</label>
+            <p id="displayUsername">-</p>
+          </div>
+          <div class="info-item">
+            <label>Nomor HP</label>
+            <p id="displayPhone">-</p>
+          </div>
+          <div class="info-item info-item-full">
+            <label>Password</label>
+            <div class="password-profile-group">
+              <input type="password" id="displayPassword" value="defaultpassword" readonly>
+              <span class="toggle-password-profile" id="togglePassword">👁️</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-footer">
+        <button id="openEditModalBtn" class="btn-primary">✏️ Edit Profil</button>
+        <button id="openDeleteModalBtn" class="btn-danger">🗑️ Hapus Akun</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal-overlay hidden" id="editProfileModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Profil Anda</h3>
+        <button class="modal-close-btn" data-modal-id="editProfileModal">&times;</button>
+      </div>
+      <form id="editProfileForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editUsername">Username</label>
+            <input type="text" id="editUsername" required>
+            <div class="error-field" id="errorEditUsername"></div>
+          </div>
+          <div class="form-group">
+            <label for="editPhone">Nomor HP</label>
+            <input type="tel" id="editPhone" placeholder="08xxxxxxxxxx" required>
+            <div class="error-field" id="errorEditPhone"></div>
+          </div>
+          <div class="form-group">
+            <label for="editPassword">Password Baru (Opsional)</label>
+            <input type="password" id="editPassword" placeholder="Kosongkan jika tidak diubah">
+            <div class="error-field" id="errorEditPassword"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-modal-id="editProfileModal">Batal</button>
+          <button type="submit" class="btn-primary">Simpan Perubahan</button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <!-- Popup -->
-  <div id="popup" class="popup hidden">
-    <div class="popup-content" id="popup-message"></div>
-  </div>
-
-  <!-- Modal Konfirmasi -->
-  <div id="confirmModal" class="modal hidden">
-    <div class="modal-content">
-      <p id="confirmMessage">Yakin ingin menghapus akun Anda?</p>
-      <div class="modal-actions">
-        <button id="confirmYes">Ya</button>
-        <button id="confirmNo">Tidak</button>
+  <div class="modal-overlay hidden" id="deleteConfirmModal">
+    <div class="modal-box" style="max-width: 450px;">
+      <div class="modal-header-delete">
+        <div class="delete-icon">⚠️</div>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <h3 class="modal-title-delete">Anda Yakin?</h3>
+        <p>Tindakan ini akan menghapus akun Anda secara permanen. Semua data yang terhubung akan hilang dan tidak dapat dipulihkan.</p>
+      </div>
+      <div class="modal-footer-delete">
+        <button type="button" class="btn-secondary" data-modal-id="deleteConfirmModal">Tidak, Batalkan</button>
+        <button type="button" id="confirmDeleteBtn" class="btn-danger">Ya, Hapus Akun Saya</button>
       </div>
     </div>
   </div>
 
-  <script src="../js/profil.js"></script>
+  <script src="../js/profile.js"></script>
 </body>
 </html>

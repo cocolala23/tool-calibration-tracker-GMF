@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manajemen Alat</title>
   <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <nav class="navbar-modern">
@@ -12,12 +15,10 @@
         <img src="../gambar/logo.png" alt="Logo" class="navbar-logo-modern" />
         <span class="navbar-title">Kalibrasi Alat</span>
     </div>
-
     <div class="navbar-links">
         <a href="dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a>
         <a href="alat.html" class="nav-link active" id="nav-alat">Tools</a>
     </div>
-
     <div class="navbar-user-section">
         <div class="user-dropdown-modern">
             <div class="user-info" id="userDropdownTrigger">
@@ -40,105 +41,125 @@
 
   <div class="notification" id="notificationBox"></div>
 
-  <main class="dashboard-content container">
-    <div class="toolbar">
-      <button id="btnTambahAlat" class="btn-tambah">➕ Tambah Alat</button>
-      <input type="text" id="searchInput" placeholder="Cari alat..." class="search-bar" />
-    </div>
+  <main class="content-container">
+    <div class="main-card">
+      <div class="card-header-tools">
+        <h2 class="tools-title">Manajemen Data Alat</h2>
+        <div class="tools-actions">
+          <input type="text" id="searchInput" placeholder="Cari alat..." class="search-input-modern" />
+          <select id="statusFilter" class="filter-select">
+            <option value="semua">Semua Status</option>
+            <option value="-">Standar</option>
+            <option value="Proses">Proses</option>
+            <option value="Selesai">Selesai</option>
+          </select>
+          <button id="btnTambahAlat" class="btn-primary">➕ Tambah Alat</button>
+        </div>
+      </div>
 
-    <div class="table-section">
-      <table id="alatTable">
-        <thead>
-          <tr>
-            <th>Registration</th>
-            <th>Description</th>
-            <th>Model</th>
-            <th>P/N</th>
-            <th>S/N</th>
-            <th>Unit</th>
-            <th>Unit Desc</th>
-            <th>Location</th>
-            <th>Next Due</th>
-            <th>Tenggat Waktu</th>
-            <th>Status Proses</th>
-            <th>Lama Kalibrasi</th>
-            <th>Tanggal Selesai</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="14" style="text-align:right; font-weight:bold">
-              Total Alat: <span id="totalAlat">0</span>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-      <div class="pagination" id="pagination"></div>
+      <div class="card-body">
+        <div class="table-wrapper">
+          <table id="alatTable">
+            <thead>
+              <tr>
+                <th>Registration</th>
+                <th>Description</th>
+                <th>Merk</th> <th>Model</th>
+                <th>P/N</th>
+                <th>S/N</th>
+                <th>Unit</th>
+                <th>Unit Desc</th>
+                <th>Location</th>
+                <th>Next Due</th>
+                <th>Tenggat Waktu</th>
+                <th>Status Proses</th>
+                <th>Lama Kalibrasi</th>
+                <th>Tanggal Selesai</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        
+        <div id="emptyState" class="empty-state hidden">
+          <img src="../gambar/empty-box.png" alt="Kotak Kosong" class="empty-state-img">
+          <h3>Tidak Ada Data Ditemukan</h3>
+          <p>Data yang Anda cari tidak ada. Coba ubah filter atau kata kunci pencarian Anda.</p>
+        </div>
+
+        <div class="pagination-container">
+            <div id="paginationInfo">Menampilkan 0 dari 0 alat</div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+      </div>
     </div>
   </main>
 
-  <div class="modal hidden" id="alatModal">
-    <div class="modal-content scrollable">
-      <h3 id="modalTitle">Tambah Alat</h3>
+  <div class="modal-overlay hidden" id="alatModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Tambah Alat Baru</h3>
+        <button class="modal-close-btn" data-modal-id="alatModal">&times;</button>
+      </div>
       <form id="alatForm">
-        <input type="text" id="registration" placeholder="Registration" required>
-        <input type="text" id="description" placeholder="Description" required>
-        <input type="text" id="model" placeholder="Model">
-        <input type="text" id="pn" placeholder="P/N">
-        <input type="text" id="sn" placeholder="S/N">
-        <input type="text" id="unit" placeholder="Unit">
-        <input type="text" id="unitDesc" placeholder="Unit Desc">
-        <input type="text" id="location" placeholder="Location">
-        <input type="date" id="nextDue" required>
-        <div class="modal-actions">
-          <button type="submit">Simpan</button>
-          <button type="button" id="batalBtn" class="btn-cancel">Batal</button>
+        <div class="modal-body">
+          <div class="form-grid">
+            <input type="text" id="registration" placeholder="Registration" required>
+            <input type="text" id="description" placeholder="Description" required>
+            <input type="text" id="merk" placeholder="Merk"> <input type="text" id="model" placeholder="Model">
+            <input type="text" id="pn" placeholder="P/N">
+            <input type="text" id="sn" placeholder="S/N">
+            <input type="text" id="unit" placeholder="Unit">
+            <input type="text" id="unitDesc" placeholder="Unit Desc">
+            <input type="text" id="location" placeholder="Location">
+            <div class="form-group-date">
+              <label for="nextDue">Next Due Date</label>
+              <input type="date" id="nextDue" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-modal-id="alatModal">Batal</button>
+          <button type="submit" class="btn-primary">Simpan Alat</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div class="modal hidden" id="editModal">
-    <div class="modal-content scrollable">
-      <h3>Edit Alat</h3>
-      <form id="editForm">
-        <input type="text" id="editRegistration" placeholder="Registration" required>
-        <input type="text" id="editDescription" placeholder="Description" required>
-        <input type="text" id="editModel" placeholder="Model">
-        <input type="text" id="editPn" placeholder="P/N">
-        <input type="text" id="editSn" placeholder="S/N">
-        <input type="text" id="editUnit" placeholder="Unit">
-        <input type="text" id="editUnitDesc" placeholder="Unit Desc">
-        <input type="text" id="editLocation" placeholder="Location">
-        <input type="date" id="editNextDue" required>
-        <div class="modal-actions">
-          <button type="submit">Simpan Perubahan</button>
-          <button type="button" id="cancelEditBtn" class="btn-cancel">Batal</button>
+  <div class="modal-overlay hidden" id="editModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 class="modal-title">Edit Data Alat</h3>
+            <button class="modal-close-btn" data-modal-id="editModal">&times;</button>
         </div>
-      </form>
+        <form id="editForm">
+            <div class="modal-body">
+                <div class="form-grid">
+                    <input type="text" id="editRegistration" placeholder="Registration" required>
+                    <input type="text" id="editDescription" placeholder="Description" required>
+                    <input type="text" id="editMerk" placeholder="Merk"> <input type="text" id="editModel" placeholder="Model">
+                    <input type="text" id="editPn" placeholder="P/N">
+                    <input type="text" id="editSn" placeholder="S/N">
+                    <input type="text" id="editUnit" placeholder="Unit">
+                    <input type="text" id="editUnitDesc" placeholder="Unit Desc">
+                    <input type="text" id="editLocation" placeholder="Location">
+                    <div class="form-group-date">
+                        <label for="editNextDue">Next Due Date</label>
+                        <input type="date" id="editNextDue" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" data-modal-id="editModal">Batal</button>
+                <button type="submit" class="btn-primary">Simpan Perubahan</button>
+            </div>
+        </form>
     </div>
   </div>
 
-  <div class="modal hidden" id="kalibrasiModal">
-    <div class="modal-content scrollable">
-      <h3>Kalibrasi Alat</h3>
-      <form id="kalibrasiForm">
-        <label for="kalMulai">Tanggal Mulai Kalibrasi</label>
-        <input type="date" id="kalMulai" required>
-
-        <label for="kalSelesai">Tanggal Selesai Kalibrasi</label>
-        <input type="date" id="kalSelesai" required>
-
-        <div class="modal-actions">
-          <button type="submit">Simpan</button>
-          <button type="button" id="batalKalibrasiBtn" class="btn-cancel">Batal</button>
-        </div>
-      </form>
+  <div class="modal-overlay hidden" id="kalibrasiModal">
     </div>
-  </div>
 
   <script src="../js/alat.js"></script>
 </body>
