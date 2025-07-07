@@ -3,26 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
+  <title>Login - Monitoring Kalibrasi</title>
   <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="login-container">
-    <form id="loginForm" autocomplete="off"> <!-- ✅ Perbaikan: gunakan 1 form saja tanpa action -->
-      <h1>Login Operator</h1>
+  <div class="login-page-wrapper">
+    <div class="login-hero-panel">
+      <div class="hero-content">
+        <img src="../gambar/logo.png" alt="Logo Aplikasi" class="hero-logo">
+        <h1>Selamat Datang Kembali</h1>
+        <p>Sistem Monitoring Kalibrasi Alat. Silakan masuk untuk melanjutkan.</p>
+      </div>
+    </div>
 
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" autocomplete="off" required />
+    <div class="login-form-panel">
+      <div class="form-container">
+        <h2>Login Operator</h2>
+        <form id="loginForm" autocomplete="off" novalidate>
+          <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required />
+            <span class="icon">👤</span>
+          </div>
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" autocomplete="new-password" required />
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+            <span class="icon toggle-password" id="togglePassword">👁️</span>
+          </div>
 
-      <button type="submit">Login</button>
-      <div id="errorMsg" class="error"></div> <!-- ✅ Menampilkan error jika login gagal -->
-    </form>
-
-    <div class="register-link">
-      <p>Belum punya akun? <a href="register.html">Daftar di sini</a></p>
+          <button type="submit" id="loginButton">Login</button>
+          
+          <div id="loginMessage" class="login-message"></div>
+        </form>
+        <div class="register-link">
+          <p>Belum punya akun? <a href="register.html">Daftar di sini</a></p>
+        </div>
+      </div>
     </div>
   </div>
 

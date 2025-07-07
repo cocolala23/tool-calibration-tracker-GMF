@@ -1,90 +1,95 @@
-function resetErrors() {
-  const errorFields = document.querySelectorAll(".error-field");
-  errorFields.forEach(field => field.textContent = "");
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const registerForm = document.getElementById("registerForm");
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("regPassword");
 
-function showFieldError(fieldId, message) {
-  const errorText = document.getElementById("error" + fieldId);
-  const inputField = document.getElementById("reg" + fieldId);
-  errorText.textContent = message;
-  inputField.classList.add("input-error");
+    // Fitur toggle show/hide password
+    togglePassword.addEventListener("click", () => {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            togglePassword.textContent = "🙈"; // Ganti ikon saat password terlihat
+        } else {
+            passwordInput.type = "password";
+            togglePassword.textContent = "👁️"; // Ganti ikon saat password tersembunyi
+        }
+    });
 
-  setTimeout(() => {
-    inputField.classList.remove("input-error");
-  }, 500);
-}
+    // Fungsi untuk menampilkan pesan error di bawah input field
+    function showFieldError(fieldId, message) {
+        const errorField = document.getElementById("error" + fieldId);
+        const inputField = document.getElementById("reg" + fieldId);
+        errorField.textContent = message;
+        inputField.classList.add("input-error"); // Menambahkan class untuk border merah
+    }
 
-// Toggle show/hide password
-document.getElementById("togglePassword").addEventListener("click", () => {
-  const passwordInput = document.getElementById("regPassword");
-  const toggleIcon = document.getElementById("togglePassword");
+    // Fungsi untuk membersihkan semua pesan error
+    function clearAllErrors() {
+        const errorFields = document.querySelectorAll(".error-field");
+        const inputFields = document.querySelectorAll(".input-error");
+        errorFields.forEach(field => field.textContent = "");
+        inputFields.forEach(field => field.classList.remove("input-error"));
+    }
 
-  if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-  } else {
-    passwordInput.type = "password";
-  }
-});
+    registerForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        clearAllErrors();
 
-document.getElementById("registerForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  resetErrors();
+        const id = document.getElementById("regId").value.trim();
+        const username = document.getElementById("regUsername").value.trim();
+        const password = document.getElementById("regPassword").value;
+        const phone = document.getElementById("regPhone").value.trim();
+        const registerMessage = document.getElementById("registerMessage");
 
-  const id = document.getElementById("regId").value.trim();
-  const username = document.getElementById("regUsername").value.trim();
-  const password = document.getElementById("regPassword").value;
-  const phone = document.getElementById("regPhone").value.trim();
-  const level = document.getElementById("regLevel").value;
+        let isValid = true;
+        let users = JSON.parse(localStorage.getItem("users")) || [];
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+        // --- VALIDASI INPUT ---
+        if (!id) {
+            showFieldError("Id", "ID Pegawai wajib diisi.");
+            isValid = false;
+        } else if (users.some(u => u.id === id)) {
+            showFieldError("Id", "ID Pegawai sudah digunakan.");
+            isValid = false;
+        }
 
-  // Validasi ID pegawai
-  if (!id) {
-    showFieldError("Id", "❗ ID pegawai wajib diisi.");
-    return;
-  }
+        if (!username) {
+            showFieldError("Username", "Username wajib diisi.");
+            isValid = false;
+        } else if (users.some(u => u.username === username)) {
+            showFieldError("Username", "Username sudah terdaftar.");
+            isValid = false;
+        }
 
-  if (users.find(u => u.id === id)) {
-    showFieldError("Id", "❗ ID pegawai sudah digunakan.");
-    return;
-  }
+        if (!password || password.length < 4) {
+            showFieldError("Password", "Password minimal 4 karakter.");
+            isValid = false;
+        }
 
-  if (users.find(u => u.username === username)) {
-    showFieldError("Username", "❗ Username sudah terdaftar.");
-    return;
-  }
+        if (!phone) {
+            showFieldError("Phone", "Nomor HP wajib diisi.");
+            isValid = false;
+        } else if (!/^08[0-9]{8,12}$/.test(phone)) {
+            showFieldError("Phone", "Format Nomor HP tidak valid.");
+            isValid = false;
+        } else if (users.some(u => u.phone === phone)) {
+            showFieldError("Phone", "Nomor HP sudah digunakan.");
+            isValid = false;
+        }
+        
+        // Jika semua validasi lolos
+        if (isValid) {
+            // Tambahkan pengguna baru ke array
+            users.push({ id, username, password, phone });
+            localStorage.setItem("users", JSON.stringify(users));
 
-  if (users.find(u => u.phone === phone)) {
-    showFieldError("Phone", "❗ Nomor HP sudah digunakan.");
-    return;
-  }
-
-  if (!/^08[0-9]{8,12}$/.test(phone)) {
-    showFieldError("Phone", "❗ Nomor HP tidak valid (format: 08xxxxxxxxxx).");
-    return;
-  }
-
-  if (!password || password.length < 4) {
-    showFieldError("Password", "❗ Password minimal 4 karakter.");
-    return;
-  }
-
-  if (!level) {
-    showFieldError("Level", "❗ Silakan pilih level jabatan.");
-    return;
-  }
-
-  // Setelah akun berhasil dibuat:
-  users.push({ id, username, password, phone, level });
-  localStorage.setItem("users", JSON.stringify(users));
-
-  const popup = document.createElement("div");
-  popup.className = "success-popup";
-  popup.textContent = "✅ Akun berhasil dibuat! Mengarahkan ke halaman login...";
-  document.body.appendChild(popup);
-
-  setTimeout(() => {
-    popup.remove();
-    window.location.href = "index.html";
-  }, 3000);
+            // Tampilkan pesan sukses
+            registerMessage.textContent = "✅ Akun berhasil dibuat! Mengarahkan ke halaman login...";
+            registerMessage.classList.add("success");
+            
+            // Arahkan ke halaman login setelah beberapa saat
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 2000); // Tunggu 2 detik
+        }
+    });
 });

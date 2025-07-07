@@ -3,48 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register Akun</title>
+  <title>Daftar Akun - Monitoring Kalibrasi</title>
   <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="login-container">
-    <h1>Daftar Akun</h1>
-    <form id="registerForm" autocomplete="off">
-
-      <label for="regId">ID Pegawai</label>
-      <input type="text" id="regId" name="id" required />
-      <div class="error-field" id="errorId"></div>
-
-      <label for="regUsername">Username</label>
-      <input type="text" id="regUsername" name="username" autocomplete="new-username" required />
-      <div class="error-field" id="errorUsername"></div>
-
-      <label for="regPassword">Password</label>
-      <div class="password-container">
-        <input type="password" id="regPassword" name="password" autocomplete="new-password" required />
-        <span class="toggle-password" id="togglePassword"></span>
+  <div class="login-page-wrapper">
+    <div class="login-hero-panel">
+      <div class="hero-content">
+        <img src="../gambar/logo.png" alt="Logo Aplikasi" class="hero-logo">
+        <h1>Buat Akun Baru</h1>
+        <p>Bergabunglah dengan sistem kami untuk mulai memonitor kalibrasi alat dengan lebih efisien.</p>
       </div>
-      <div class="error-field" id="errorPassword"></div>
+    </div>
 
-      <label for="regPhone">Nomor HP</label>
-      <input type="text" id="regPhone" name="phone" autocomplete="off" placeholder="08xxxxxxxxxx" required />
-      <div class="error-field" id="errorPhone"></div>
+    <div class="login-form-panel">
+      <div class="form-container">
+        <h2>Formulir Pendaftaran</h2>
+        <form id="registerForm" autocomplete="off" novalidate>
+          
+          <div class="input-group">
+            <label for="regId">ID Pegawai</label>
+            <input type="text" id="regId" name="id" required placeholder="Masukkan ID Pegawai Anda">
+            <div class="error-field" id="errorId"></div>
+          </div>
 
-      <label for="regLevel">Level Jabatan</label>
-      <select id="regLevel" name="level" required>
-        <option value="">-- Pilih Jabatan --</option>
-        <option value="Operator">Operator</option>
-        <option value="Manajer">Manajer</option>
-        <option value="Supervisor">Supervisor</option>
-        <option value="Admin">Admin</option>
-      </select>
-      <div class="error-field" id="errorLevel"></div>
+          <div class="input-group">
+            <label for="regUsername">Username</label>
+            <input type="text" id="regUsername" name="username" required placeholder="Buat username unik">
+            <div class="error-field" id="errorUsername"></div>
+          </div>
 
-      <button type="submit">Daftar</button>
-    </form>
+          <div class="input-group">
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" name="password" required placeholder="Minimal 4 karakter">
+            <span class="icon toggle-password" id="togglePassword">👁️</span>
+            <div class="error-field" id="errorPassword"></div>
+          </div>
 
-    <div class="register-link">
-      <p>Sudah punya akun? <a href="../html/index.html">Login di sini</a></p>
+          <div class="input-group">
+            <label for="regPhone">Nomor HP</label>
+            <input type="tel" id="regPhone" name="phone" required placeholder="Contoh: 081234567890">
+            <div class="error-field" id="errorPhone"></div>
+          </div>
+
+          <button type="submit" id="registerButton">Daftar Akun</button>
+          
+          <div id="registerMessage" class="login-message"></div>
+        </form>
+
+        <div class="register-link">
+          <p>Sudah punya akun? <a href="index.html">Login di sini</a></p>
+        </div>
+      </div>
     </div>
   </div>
 

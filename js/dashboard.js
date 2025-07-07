@@ -1,23 +1,54 @@
 // === CEK LOGIN & SETUP USER ===
 document.addEventListener("DOMContentLoaded", () => {
+  // === BLOK KODE NAVBAR MODERN (UNTUK SEMUA HALAMAN) ===
+
+  // 1. Cek status login, jika tidak ada, lempar kembali ke halaman login
   const loggedInUser = localStorage.getItem("loggedInUser");
   if (!loggedInUser) {
-    alert("❗ Anda harus login terlebih dahulu.");
-    window.location.href = "index.html";
-    return;
+      alert("❗ Anda harus login terlebih dahulu.");
+      window.location.href = "index.html";
+  } else {
+      // 2. Tampilkan username pengguna yang login
+      document.getElementById("loggedInUser").textContent = loggedInUser;
+      // Ambil inisial untuk avatar
+      const userAvatar = document.querySelector(".user-avatar");
+      if(userAvatar) {
+          userAvatar.textContent = loggedInUser.charAt(0).toUpperCase();
+      }
   }
 
-  // Setup Navbar User
-  document.getElementById("loggedInUser").textContent = loggedInUser;
-  document.getElementById("loggedInUser").addEventListener("click", () => {
-    const dropdown = document.getElementById("userDropdown");
-    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-  });
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "index.html";
-  });
+  // 3. Logika untuk dropdown menu pengguna
+  const dropdownTrigger = document.getElementById("userDropdownTrigger");
+  const dropdownContent = document.getElementById("userDropdownContent");
 
+  if (dropdownTrigger) {
+      dropdownTrigger.addEventListener("click", (event) => {
+          // Mencegah window.onclick menutup dropdown saat trigger di-klik
+          event.stopPropagation();
+          dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
+      });
+  }
+
+  // Menutup dropdown jika pengguna mengklik di luar area dropdown
+  window.onclick = function(event) {
+      if (dropdownContent && dropdownContent.style.display === 'block') {
+          dropdownContent.style.display = "none";
+      }
+  }
+
+  // 4. Fungsionalitas tombol logout
+  const logoutButton = document.getElementById("logoutBtn");
+  if (logoutButton) {
+      logoutButton.addEventListener("click", () => {
+          // Hapus semua data sesi dari localStorage
+          localStorage.removeItem("isLoggedIn");
+          localStorage.removeItem("loggedInUser");
+          localStorage.removeItem("currentUser");
+          
+          // Arahkan ke halaman login
+          window.location.href = "index.html";
+      });
+  }
   // Muat semua data dashboard
   loadDashboardData();
 });

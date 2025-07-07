@@ -7,47 +7,156 @@ body {
   color: #333;
 }
 
+/* =================================
+   STYLES FORM REGISTRASI
+   ================================= */
+
+/* Styling untuk field pesan error di bawah input */
+.error-field {
+  color: #e76f51; /* Warna merah yang lebih lembut */
+  font-size: 0.85em;
+  font-weight: 500;
+  min-height: 20px; /* Beri ruang agar layout tidak "lompat" */
+  margin-top: 5px;
+}
+
+/* Styling untuk input yang error */
+.input-group input.input-error {
+  border-color: #e76f51;
+  background-color: #fff8f6;
+}
+
+.input-group input.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(231, 111, 81, 0.2);
+}
+
 /* Navbar */
-.navbar {
-  background-color: whitesmoke;
-  color: grey;
-  padding: 1em 2em;
+.navbar-modern {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 0 30px;
+  height: 65px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.navbar-right {
+/* Bagian Kiri: Logo dan Judul */
+.navbar-brand {
   display: flex;
   align-items: center;
-  gap: 1em; /* atau gunakan margin jika tidak ingin pakai gap */
+  gap: 12px;
 }
-
-.alat-nav {
-  color: white;
+.navbar-logo-modern {
+  height: 35px;
+}
+.navbar-title {
   font-size: 1.2em;
-  margin: 0%;
+  font-weight: 600;
+  color: #03045e;
 }
 
-.navbar-left h2 {
-color: grey;
-  font-size: 1.2em;
+/* Bagian Tengah: Link Navigasi */
+.navbar-links {
+  display: flex;
+  gap: 15px;
 }
-
-
-.navbar-center {
+.nav-link {
+  padding: 20px 10px;
+  text-decoration: none;
+  color: #555;
+  font-weight: 600;
+  font-size: 1em;
+  position: relative;
+  transition: color 0.3s;
+}
+.nav-link:hover {
+  color: #0077b6;
+}
+/* Garis bawah untuk link yang aktif */
+.nav-link.active {
+  color: #0077b6;
+  font-weight: 700;
+}
+.nav-link.active::after {
+  content: '';
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #0077b6;
+  border-radius: 2px;
 }
 
-.navbar-logo {
-  height: 40px;
-  object-fit: contain;
+/* Bagian Kanan: User Dropdown */
+.navbar-user-section {
+  position: relative;
 }
-
-
+.user-dropdown-modern {
+  position: relative;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+.user-info:hover {
+  background-color: #f1f1f1;
+}
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #00b4d8;
+  /* Avatar akan dibuat dari inisial nama menggunakan JS jika diperlukan */
+}
+.username-display {
+  font-weight: 600;
+  color: #333;
+}
+.dropdown-arrow {
+  font-size: 0.8em;
+  color: #888;
+}
+.dropdown-content-modern {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background-color: #ffffff;
+  min-width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  overflow: hidden; /* Agar border-radius bekerja dengan baik */
+}
+.dropdown-content-modern a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: #333;
+  font-size: 0.95em;
+  transition: background-color 0.3s, color 0.3s;
+}
+.dropdown-content-modern a:hover {
+  background-color: #f0f8ff;
+  color: #0077b6;
+}
+.dropdown-divider {
+  height: 1px;
+  background-color: #eef2f5;
+  margin: 5px 0;
+}
 
 /* Container */
 .container {
@@ -236,74 +345,156 @@ table th, table td {
 
 table tr:nth-child(even) {
   background-color: #f1f9ff;
+} 
+
+/* =================================
+   STYLES LOGIN MODERN
+   ================================= */
+
+/* Menggunakan font Poppins jika tersedia */
+body {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
 }
 
-/* Login/Register Container */
-.login-container {
-  max-width: 400px;
-  margin: 5em auto;
-  background-color: white;
-  padding: 2em;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+.login-page-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dua kolom dengan lebar sama */
+  height: 100vh;
+  overflow: hidden;
 }
 
-.login-container h1 {
+/* Panel Kiri (Hero) */
+.login-hero-panel {
+  background: linear-gradient(135deg, #0077b6, #00b4d8);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
   text-align: center;
-  color: #0077b6;
-  margin-bottom: 1em;
 }
 
-/* Input dan Select Style Disatukan */
-.login-container input,
-.login-container select {
-  padding: 0.6em;
-  margin-bottom: 1em;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 1em;
+.hero-content .hero-logo {
+  max-width: 90%;
+  margin-bottom: 20px;
+  filter: brightness(0) invert(1); /* Membuat logo jadi putih */
+}
+
+.hero-content h1 {
+  font-size: 2.5em;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.hero-content p {
+  font-size: 1.1em;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* Panel Kanan (Form) */
+.login-form-panel {
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
   width: 100%;
+  max-width: 400px;
+  padding: 40px;
+}
+
+.form-container h2 {
+  font-size: 2em;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.input-group label {
+  display: none; /* Kita gunakan placeholder sebagai label visual */
+}
+
+.input-group input {
+  width: 100%;
+  padding: 15px 45px 15px 15px; /* Beri ruang untuk ikon */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
   box-sizing: border-box;
-  background-color: #f9f9f9;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.login-container select {
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%22292%22%20height%3D%22292%22%20viewBox%3D%220%200%20292%20292%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M287%2069c5%205%205%2013%200%2018L159%20215c-5%205-13%205-18%200L5%2087c-5-5-5-13%200-18s13-5%2018%200l123%20123L269%2069c5-5%2013-5%2018%200z%22%20fill%3D%22%23333%22/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75em center;
-  background-size: 0.65em auto;
+.input-group input:focus {
+  outline: none;
+  border-color: #0077b6;
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.2);
 }
 
-.login-container button {
+.input-group .icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: #aaa;
+  cursor: pointer;
+}
+
+#loginButton {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
   background: #0077b6;
   color: white;
-  padding: 0.75em;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
+  font-size: 1.1em;
+  font-weight: 600;
   cursor: pointer;
-  width: 100%;
-  font-size: 1em;
+  transition: background-color 0.3s, transform 0.1s;
 }
 
-.login-container button:hover {
-  background: #0096c7;
+#loginButton:hover {
+  background: #005a8d;
+}
+#loginButton:active {
+  transform: scale(0.98);
 }
 
-.register-link {
+.login-message {
   text-align: center;
-  margin-top: 1em;
+  margin-top: 15px;
+  font-weight: 600;
+  height: 20px; /* Beri tinggi agar layout tidak bergeser */
 }
 
-.register-link a {
-  color: #0077b6;
-  text-decoration: none;
-  font-weight: bold;
+.login-message.success {
+  color: #2a9d8f;
 }
 
-.register-link a:hover {
-  text-decoration: underline;
+.login-message.error {
+  color: #e76f51;
+}
+
+/* Penyesuaian untuk layar kecil (Responsive) */
+@media (max-width: 900px) {
+  .login-page-wrapper {
+    grid-template-columns: 1fr; /* Satu kolom di layar kecil */
+  }
+  .login-hero-panel {
+    display: none; /* Sembunyikan panel gambar di HP agar fokus ke form */
+  }
+  .login-form-panel {
+    background-color: #fff; /* Jadikan background putih penuh */
+  }
 }
 
 /* Pesan error */
@@ -389,81 +580,6 @@ form select {
 
 .info-board li {
   padding: 0.3em 0;
-}
-
-/* Navbar username dropdown */
-.user-dropdown {
-  position: relative;
-  display: inline-block;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.username-display::after {
-  content: " ▼";
-  font-size: 1em;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: #ffffff;
-  color: #333;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-top: 0.5em;
-  min-width: 160px;
-  z-index: 999;
-  box-shadow: 0 0 10px rgba(0,0,0,0.15);
-  font-size: 0.95em;
-}
-
-.dropdown-content a {
-  display: block;
-  padding: 0.75em 1em;
-  text-decoration: none;
-  color: #333;
-  font-weight: normal;
-}
-
-.dropdown-content a:hover {
-  background-color: #f1f1f1;
-  color: #0077b6;
-}
-
-/* Navbar kanan gabungkan Tools & User */
-.user-tools-group {
-  display: flex;
-  align-items: center;
-  gap: 1em;
-}
-
-/* Link Tools di Navbar */
-
-.nav-tools-link {
-  color: #333;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 0.5em 0.5em;
-}
-
-.nav-tools-link:hover {
-  color: #0077b6;
-}
-
-.nav-right-group {
-  display: flex;
-  align-items: center;
-  gap: 1em;
-}
-
-/* Garis vertikal pemisah antara tombol Tools dan Username */
-.vertical-divider {
-  width: 1px;
-  height: 40px;
-  background-color: #ccc;
-  margin: 0 0.5em;
 }
 
 /* Profil Tambahan spacing dan style */
