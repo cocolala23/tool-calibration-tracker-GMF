@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Profil Pengguna</title>
   <link rel="stylesheet" href="../style.css" />
+  <link rel="icon" type="image/png" href="../gambar/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
   <nav class="navbar-modern">
@@ -29,11 +30,14 @@
             </div>
             <div class="dropdown-content-modern" id="userDropdownContent">
                 <a href="profile.html"><i class="fa-solid fa-user-gear"></i> Profil Saya</a>
+                <div class="dropdown-divider"></div>
                 <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
             </div>
         </div>
     </div>
   </nav>
+
+  <div class="notification" id="notificationBox"></div>
 
   <main class="profile-page-container">
     <div class="profile-card">
@@ -42,18 +46,12 @@
         <h2 id="profileUsernameDisplay">Username Pengguna</h2>
         <p id="profileIdDisplay">ID Pegawai: -</p>
       </div>
-
       <div class="profile-body">
         <h3>Informasi Akun</h3>
         <div class="info-grid">
-          <div class="info-item">
-            <label>Username</label>
-            <p id="displayUsername">-</p>
-          </div>
-          <div class="info-item">
-            <label>Nomor HP</label>
-            <p id="displayPhone">-</p>
-          </div>
+          <div class="info-item"><label>ID Pegawai</label><p id="displayId">-</p></div>
+          <div class="info-item"><label>Username</label><p id="displayUsername">-</p></div>
+          <div class="info-item"><label>Nomor HP</label><p id="displayPhone">-</p></div>
           <div class="info-item info-item-full">
             <label>Password</label>
             <div class="password-profile-group">
@@ -63,7 +61,6 @@
           </div>
         </div>
       </div>
-
       <div class="profile-footer">
         <button id="openEditModalBtn" class="btn-primary"><i class="fa-solid fa-user-pen"></i> Edit Profil</button>
         <button id="openDeleteModalBtn" class="btn-danger"><i class="fa-solid fa-user-slash"></i> Hapus Akun</button>
@@ -82,17 +79,14 @@
           <div class="form-group">
             <label for="editId">ID Pegawai</label>
             <input type="text" id="editId" required>
-            <div class="error-field" id="errorEditId"></div>
           </div>
           <div class="form-group">
             <label for="editUsername">Username</label>
             <input type="text" id="editUsername" required>
-            <div class="error-field" id="errorEditUsername"></div>
           </div>
           <div class="form-group">
             <label for="editPhone">Nomor HP</label>
             <input type="tel" id="editPhone" placeholder="08xxxxxxxxxx" required>
-            <div class="error-field" id="errorEditPhone"></div>
           </div>
           <div class="form-group">
               <label for="editPassword">Password Baru (Opsional)</label>
@@ -100,7 +94,6 @@
                   <input type="password" id="editPassword" placeholder="Kosongkan jika tidak diubah">
                   <i class="fa-solid fa-eye toggle-password" id="toggleEditPassword"></i>
               </div>
-              <div class="error-field" id="errorEditPassword"></div>
           </div>
         </div>
         <div class="modal-footer">

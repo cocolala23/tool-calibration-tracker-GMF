@@ -1,14 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ... (Blok Kode Navbar tetap sama, tidak perlu diubah) ...
+    // === LOGIKA NAVBAR MODERN (Konsisten dengan halaman lain) ===
     const loggedInUser = localStorage.getItem("loggedInUser");
     if (!loggedInUser) {
         alert("❗ Anda harus login terlebih dahulu.");
         window.location.href = "index.html";
-        return;
+        return; 
     }
-    document.getElementById("loggedInUser").textContent = loggedInUser;
+    const loggedInUserDisplay = document.getElementById("loggedInUser");
+    if (loggedInUserDisplay) loggedInUserDisplay.textContent = loggedInUser;
+    
     const userAvatar = document.querySelector(".user-avatar");
     if (userAvatar) userAvatar.textContent = loggedInUser.charAt(0).toUpperCase();
+    
     const dropdownTrigger = document.getElementById("userDropdownTrigger");
     const dropdownContent = document.getElementById("userDropdownContent");
     if (dropdownTrigger && dropdownContent) {
@@ -32,21 +35,42 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
     // === Logika Halaman Profil ===
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let users = JSON.parse(localStorage.getItem("users")) || [];
+    const notificationBox = document.getElementById("notificationBox");
 
+    // **Fungsi Notifikasi Modern**
+    function showNotification(message, type = 'success') {
+        if(notificationBox) {
+            notificationBox.innerHTML = message;
+            notificationBox.className = 'notification';
+            notificationBox.classList.add(type === 'success' ? 'notif-success' : 'notif-warning', 'show');
+            setTimeout(() => {
+                notificationBox.classList.remove('show');
+            }, 3000);
+        } else {
+            alert(message); // Fallback jika elemen notifikasi tidak ditemukan
+        }
+    }
+    
+    // Fungsi untuk mengisi data profil ke elemen HTML
     function populateProfileData() {
-        if (!currentUser) return;
-        document.getElementById("profileAvatar").textContent = currentUser.username.charAt(0).toUpperCase();
-        document.getElementById("profileUsernameDisplay").textContent = currentUser.username;
-        document.getElementById("profileIdDisplay").textContent = `ID Pegawai: ${currentUser.id}`;
-        document.getElementById("displayUsername").textContent = currentUser.username;
-        document.getElementById("displayPhone").textContent = currentUser.phone;
-        document.getElementById("displayPassword").value = currentUser.password;
+        if (currentUser && currentUser.username) {
+            document.getElementById("profileAvatar").textContent = currentUser.username.charAt(0).toUpperCase();
+            document.getElementById("profileUsernameDisplay").textContent = currentUser.username;
+            document.getElementById("profileIdDisplay").textContent = `ID Pegawai: ${currentUser.id}`;
+            document.getElementById("displayId").textContent = currentUser.id;
+            document.getElementById("displayUsername").textContent = currentUser.username;
+            document.getElementById("displayPhone").textContent = currentUser.phone;
+            document.getElementById("displayPassword").value = currentUser.password;
+        } else {
+            showNotification("Sesi tidak valid, silakan login kembali.", "warning");
+            setTimeout(() => { window.location.href = "index.html"; }, 2000);
+        }
     }
 
+    // --- FITUR LIHAT PASSWORD ---
     const togglePassword = document.getElementById("togglePassword");
     const passwordInput = document.getElementById("displayPassword");
     if (togglePassword && passwordInput) {
@@ -57,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
             togglePassword.classList.toggle("fa-eye-slash");
         });
     }
-
+    
     const toggleEditPassword = document.getElementById("toggleEditPassword");
     const editPasswordInput = document.getElementById("editPassword");
     if (toggleEditPassword && editPasswordInput) {
@@ -69,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- LOGIKA MODAL (UMUM) ---
     const showModal = (modalId) => {
         const modal = document.getElementById(modalId);
         if (modal) modal.classList.remove("hidden");
@@ -78,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (modal) modal.classList.add("hidden");
     };
 
+    // Event listener untuk semua tombol close modal
     document.querySelectorAll('.modal-close-btn, .btn-secondary').forEach(button => {
         button.addEventListener('click', () => {
             const modalId = button.getAttribute('data-modal-id');
@@ -85,12 +111,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- LOGIKA EDIT PROFIL (DENGAN PENAMBAHAN ID) ---
+    // --- LOGIKA EDIT PROFIL ---
     const openEditModalBtn = document.getElementById("openEditModalBtn");
     const editProfileForm = document.getElementById("editProfileForm");
     if (openEditModalBtn) {
         openEditModalBtn.addEventListener("click", () => {
-            // PERBAIKAN: Isi form dengan data ID juga
             document.getElementById("editId").value = currentUser.id;
             document.getElementById("editUsername").value = currentUser.username;
             document.getElementById("editPhone").value = currentUser.phone;
@@ -102,50 +127,37 @@ document.addEventListener("DOMContentLoaded", () => {
     if (editProfileForm) {
         editProfileForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            // PERBAIKAN: Ambil nilai ID baru dari form
             const newId = document.getElementById("editId").value.trim();
             const newUsername = document.getElementById("editUsername").value.trim();
             const newPhone = document.getElementById("editPhone").value.trim();
             const newPassword = document.getElementById("editPassword").value;
 
-            // PERBAIKAN: Validasi agar ID baru tidak duplikat dengan pengguna lain
             const isIdTaken = users.some(user => user.id === newId && user.id !== currentUser.id);
-            if (isIdTaken) {
-                alert("ID Pegawai sudah digunakan oleh pengguna lain.");
-                return;
-            }
-
+            if (isIdTaken) { showNotification("ID Pegawai sudah digunakan.", "warning"); return; }
+            
             const isUsernameTaken = users.some(user => user.username === newUsername && user.id !== currentUser.id);
-            if (isUsernameTaken) {
-                alert("Username sudah digunakan oleh pengguna lain.");
+            if (isUsernameTaken) { showNotification("Username sudah digunakan.", "warning"); return; }
+
+            if (newPassword && newPassword.length < 4) {
+                showNotification("Password baru minimal 4 karakter.", "warning");
                 return;
             }
 
-            // Cari index pengguna di array utama menggunakan ID lama
             const userIndex = users.findIndex(user => user.id === currentUser.id);
             if (userIndex > -1) {
-                // Perbarui semua data, termasuk ID
                 users[userIndex].id = newId;
                 users[userIndex].username = newUsername;
                 users[userIndex].phone = newPhone;
-                if (newPassword) {
-                    if (newPassword.length < 4) {
-                        alert("Password baru minimal harus 4 karakter.");
-                        return;
-                    }
-                    users[userIndex].password = newPassword;
-                }
+                if (newPassword) { users[userIndex].password = newPassword; }
 
                 localStorage.setItem("users", JSON.stringify(users));
-                
-                // Perbarui juga data currentUser dengan semua data baru
                 currentUser = users[userIndex];
                 localStorage.setItem("currentUser", JSON.stringify(currentUser));
                 localStorage.setItem("loggedInUser", newUsername);
 
                 populateProfileData();
                 hideModal("editProfileModal");
-                alert("Profil berhasil diperbarui!");
+                showNotification("✅ Profil berhasil diperbarui!");
                 document.getElementById("loggedInUser").textContent = newUsername;
             }
         });
@@ -154,13 +166,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- LOGIKA HAPUS AKUN ---
     const openDeleteModalBtn = document.getElementById("openDeleteModalBtn");
     const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-
     if (openDeleteModalBtn) {
         openDeleteModalBtn.addEventListener("click", () => {
             showModal("deleteConfirmModal");
         });
     }
-
     if (confirmDeleteBtn) {
         confirmDeleteBtn.addEventListener("click", () => {
             const updatedUsers = users.filter(user => user.id !== currentUser.id);
@@ -168,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.removeItem("currentUser");
             localStorage.removeItem("loggedInUser");
             localStorage.removeItem("isLoggedIn");
-            alert("Akun berhasil dihapus.");
+            sessionStorage.setItem("notification", "Akun Anda telah berhasil dihapus.");
             window.location.href = "index.html";
         });
     }

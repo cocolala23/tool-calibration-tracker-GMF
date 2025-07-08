@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manajemen Alat</title>
   <link rel="stylesheet" href="../style.css" />
+  <link rel="icon" type="image/png" href="../gambar/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
   <nav class="navbar-modern">
@@ -29,6 +30,7 @@
             </div>
             <div class="dropdown-content-modern" id="userDropdownContent">
                 <a href="profile.html"><i class="fa-solid fa-user-gear"></i> Profil Saya</a>
+                <div class="dropdown-divider"></div>
                 <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
             </div>
         </div>
@@ -52,15 +54,15 @@
           <button id="btnTambahAlat" class="btn-primary"><i class="fa-solid fa-plus"></i> Tambah Alat</button>
         </div>
       </div>
-
       <div class="card-body">
         <div class="table-wrapper">
-          <table id="alatTable">
+          <table id="alatTable" class="data-table">
             <thead>
               <tr>
                 <th>Registration</th>
                 <th>Description</th>
-                <th>Merk</th> <th>Model</th>
+                <th>Merk</th>
+                <th>Model</th>
                 <th>P/N</th>
                 <th>S/N</th>
                 <th>Unit</th>
@@ -77,13 +79,11 @@
             <tbody></tbody>
           </table>
         </div>
-        
         <div id="emptyState" class="empty-state hidden">
           <img src="../gambar/box.png" alt="Kotak Kosong" class="empty-state-img">
           <h3>Tidak Ada Data Ditemukan</h3>
           <p>Data yang Anda cari tidak ada. Coba ubah filter atau kata kunci pencarian Anda.</p>
         </div>
-
         <div class="pagination-container">
             <div id="paginationInfo">Menampilkan 0 dari 0 alat</div>
             <div class="pagination" id="pagination"></div>
@@ -103,7 +103,8 @@
           <div class="form-grid">
             <input type="text" id="registration" placeholder="Registration" required>
             <input type="text" id="description" placeholder="Description" required>
-            <input type="text" id="merk" placeholder="Merk"> <input type="text" id="model" placeholder="Model">
+            <input type="text" id="merk" placeholder="Merk">
+            <input type="text" id="model" placeholder="Model">
             <input type="text" id="pn" placeholder="P/N">
             <input type="text" id="sn" placeholder="S/N">
             <input type="text" id="unit" placeholder="Unit">
@@ -134,7 +135,8 @@
                 <div class="form-grid">
                     <input type="text" id="editRegistration" placeholder="Registration" required>
                     <input type="text" id="editDescription" placeholder="Description" required>
-                    <input type="text" id="editMerk" placeholder="Merk"> <input type="text" id="editModel" placeholder="Model">
+                    <input type="text" id="editMerk" placeholder="Merk">
+                    <input type="text" id="editModel" placeholder="Model">
                     <input type="text" id="editPn" placeholder="P/N">
                     <input type="text" id="editSn" placeholder="S/N">
                     <input type="text" id="editUnit" placeholder="Unit">
@@ -176,6 +178,22 @@
               <button type="submit" class="btn-primary">Mulai Proses</button>
           </div>
       </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="deleteAlatModal">
+    <div class="modal-box" style="max-width: 450px;">
+      <div class="modal-header-delete">
+        <div class="delete-icon"><i class="fa-solid fa-trash-can"></i></div>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <h3 class="modal-title-delete">Hapus Alat Ini?</h3>
+        <p>Apakah Anda yakin ingin menghapus alat <strong id="namaAlatDihapus"></strong>? Tindakan ini tidak dapat diurungkan.</p>
+      </div>
+      <div class="modal-footer-delete">
+        <button type="button" class="btn-secondary" data-modal-id="deleteAlatModal">Batal</button>
+        <button type="button" id="confirmDeleteAlatBtn" class="btn-danger">Ya, Hapus</button>
+      </div>
     </div>
   </div>
 

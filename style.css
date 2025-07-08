@@ -539,7 +539,11 @@ h1, h2, h3 {
   background: linear-gradient(135deg, #0077b6, #0096c7);
   color: white;
 }
-.profile-header h2 { color: white; }
+.profile-header h2 { 
+  color: white;
+  margin: 0 0 5px 0;
+  font-size: 1.8em; 
+}
 .profile-avatar-large {
   width: 100px;
   height: 100px;

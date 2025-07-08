@@ -1,25 +1,18 @@
-// === EVENT LISTENER UTAMA UNTUK MEMASTIKAN HALAMAN SELALU TER-UPDATE ===
-
-// Jalankan saat HTML selesai dimuat (untuk pemuatan pertama)
+// === EVENT LISTENER UTAMA ===
 window.addEventListener('DOMContentLoaded', inisialisasiHalamanAlat);
-
-// Jalankan saat halaman ditampilkan (termasuk saat navigasi back/forward dari cache)
 window.addEventListener('pageshow', function(event) {
-    // 'persisted' bernilai true jika halaman diambil dari cache
     if (event.persisted) {
-        console.log("Halaman dimuat dari cache. Inisialisasi ulang.");
         inisialisasiHalamanAlat();
     }
 });
 
-
-// === FUNGSI UTAMA UNTUK MENGINISIALISASI SELURUH HALAMAN ===
+// === FUNGSI UTAMA UNTUK MENGINISIALISASI HALAMAN ===
 function inisialisasiHalamanAlat() {
-    console.log("Memulai inisialisasi halaman alat...");
-
+    
     // === KONSTANTA DAN VARIABEL GLOBAL ===
     const alatListKey = "alatList";
     let alatList = JSON.parse(localStorage.getItem(alatListKey)) || [];
+    let currentDeleteIndex = null; // Variabel baru untuk menyimpan index yang akan dihapus
     let currentEditIndex = null;
     const itemsPerPage = 10;
     let currentPage = 1;
@@ -37,9 +30,11 @@ function inisialisasiHalamanAlat() {
     const modalTambah = document.getElementById("alatModal");
     const modalEdit = document.getElementById("editModal");
     const modalKalibrasi = document.getElementById("kalibrasiModal");
+    const modalHapus = document.getElementById("deleteAlatModal"); // Ambil elemen modal hapus
     const alatForm = document.getElementById("alatForm");
     const editForm = document.getElementById("editForm");
     const kalibrasiForm = document.getElementById("kalibrasiForm");
+    const confirmDeleteAlatBtn = document.getElementById("confirmDeleteAlatBtn"); // Ambil tombol konfirmasi hapus
 
     // === LOGIKA NAVBAR MODERN ===
     const loggedInUser = localStorage.getItem("loggedInUser");
@@ -78,6 +73,16 @@ function inisialisasiHalamanAlat() {
     }
 
     // === FUNGSI UTILITY ===
+    const showNotification = (message, type = 'success') => {
+        if(notificationBox) {
+            notificationBox.innerHTML = message;
+            notificationBox.className = 'notification';
+            notificationBox.classList.add(type === 'success' ? 'notif-success' : 'notif-warning', 'show');
+            setTimeout(() => {
+                notificationBox.classList.remove('show');
+            }, 3000);
+        }
+    };
     const hitungTenggat = (nextDue) => {
         const now = new Date(); now.setHours(0,0,0,0);
         const due = new Date(nextDue); due.setHours(0,0,0,0);
@@ -89,14 +94,6 @@ function inisialisasiHalamanAlat() {
     };
     const showModal = (modalElement) => { if(modalElement) modalElement.classList.remove('hidden'); };
     const hideModal = (modalElement) => { if(modalElement) modalElement.classList.add('hidden'); };
-    const showNotification = (message, type = 'success') => {
-        if(notificationBox) {
-            notificationBox.innerHTML = message;
-            notificationBox.className = 'notification';
-            notificationBox.classList.add(type === 'success' ? 'notif-success' : 'notif-warning', 'show');
-            setTimeout(() => notificationBox.classList.remove('show'), 5000);
-        }
-    };
     const hitungLamaKalibrasi = (mulai, selesai) => {
         const t1 = new Date(mulai);
         const t2 = new Date(selesai);
@@ -105,7 +102,7 @@ function inisialisasiHalamanAlat() {
         return `${Math.ceil(hari)} hari`;
     };
 
-    // === FUNGSI AKSI (Didaftarkan ke 'window') ===
+    // === FUNGSI AKSI ===
     window.openEditModal = function(index) {
         currentEditIndex = index;
         const alat = alatList[index];
@@ -123,13 +120,20 @@ function inisialisasiHalamanAlat() {
             showModal(modalEdit);
         }
     };
+
+    // **PERBAIKAN FUNGSI HAPUS ALAT**
     window.hapusAlat = function(index) {
-        if (confirm(`Yakin ingin menghapus alat: ${alatList[index].description}?`)) {
-            alatList.splice(index, 1);
-            localStorage.setItem(alatListKey, JSON.stringify(alatList));
-            renderTable();
+        // Simpan index yang akan dihapus
+        currentDeleteIndex = index;
+        // Tampilkan nama alat di modal
+        const namaAlatDihapus = document.getElementById("namaAlatDihapus");
+        if (namaAlatDihapus) {
+            namaAlatDihapus.textContent = alatList[index].description;
         }
+        // Tampilkan modal konfirmasi
+        showModal(modalHapus);
     };
+
     window.openKalibrasiModal = function(index) {
         currentEditIndex = index;
         if(kalibrasiForm) kalibrasiForm.reset();
@@ -144,8 +148,7 @@ function inisialisasiHalamanAlat() {
 
     // === RENDER TABEL UTAMA ===
     function renderTable() {
-        if (!tableBody) return; // Pengaman jika tabel tidak ada
-
+        if (!tableBody) return;
         const keyword = searchInput.value.toLowerCase();
         let filteredData = alatList.filter(alat => {
             const matchesKeyword = Object.values(alat).some(val => String(val).toLowerCase().includes(keyword));
@@ -177,22 +180,16 @@ function inisialisasiHalamanAlat() {
             let statusHtml = '-';
             if (alat.status === 'Proses') statusHtml = `<span class="status-badge status-proses">Proses</span>`;
             else if (alat.status === 'Selesai') statusHtml = `<span class="status-badge status-selesai">Selesai</span>`;
-            
-            let aksiHtml = `
-                <button class="action-btn edit-btn" title="Edit" onclick="openEditModal(${globalIndex})"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button class="action-btn delete-btn" title="Hapus" onclick="hapusAlat(${globalIndex})"><i class="fa-solid fa-trash-can"></i></button>
-            `;
+            let aksiHtml = `<button class="action-btn edit-btn" title="Edit" onclick="openEditModal(${globalIndex})"><i class="fa-solid fa-pen-to-square"></i></button><button class="action-btn delete-btn" title="Hapus" onclick="hapusAlat(${globalIndex})"><i class="fa-solid fa-trash-can"></i></button>`;
             if (alat.status === 'Proses') {
                 aksiHtml += `<button class="action-btn complete-btn" title="Selesaikan Kalibrasi" onclick="selesaiKalibrasi(${globalIndex})"><i class="fa-solid fa-check"></i></button>`;
             } else if (alat.status !== 'Selesai') {
                 aksiHtml += `<button class="action-btn calibrate-btn" title="Mulai Kalibrasi" onclick="openKalibrasiModal(${globalIndex})"><i class="fa-solid fa-sliders"></i></button>`;
             }
-
             const row = document.createElement("tr");
             row.innerHTML = `<td>${alat.registration}</td><td>${alat.description}</td><td>${alat.merk || '-'}</td><td>${alat.model || '-'}</td><td>${alat.pn || '-'}</td><td>${alat.sn || '-'}</td><td>${alat.unit || '-'}</td><td>${alat.unitDesc || '-'}</td><td>${alat.location || '-'}</td><td>${(alat.status === "Proses" || alat.status === "Selesai") ? '-' : alat.nextDue}</td><td class="${tenggat.class}">${tenggat.text}</td><td>${statusHtml}</td><td>${alat.lamaKalibrasi || '-'}</td><td>${alat.tanggalSelesai || '-'}</td><td class="kolom-aksi-modern">${aksiHtml}</td>`;
             tableBody.appendChild(row);
         });
-
         renderPaginationControls(filteredData.length);
         if(paginationInfo) paginationInfo.textContent = `Menampilkan ${paginatedData.length > 0 ? start + 1 : 0} - ${start + paginatedData.length} dari ${filteredData.length} alat`;
     }
@@ -242,6 +239,7 @@ function inisialisasiHalamanAlat() {
         localStorage.setItem(alatListKey, JSON.stringify(alatList));
         renderTable();
         hideModal(modalTambah);
+        showNotification("✅ Alat baru berhasil ditambahkan!");
     });
     if(editForm) editForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -267,17 +265,18 @@ function inisialisasiHalamanAlat() {
             renderTable();
             hideModal(modalEdit);
             currentEditIndex = null;
+            showNotification("✅ Data alat berhasil diperbarui!");
         }
     });
     if(kalibrasiForm) kalibrasiForm.addEventListener("submit", (e) => {
         e.preventDefault();
         if (currentEditIndex !== null) {
+            const alat = alatList[currentEditIndex];
             const mulai = document.getElementById("kalMulai").value;
             const selesai = document.getElementById("kalSelesai").value;
             if (!mulai || !selesai || new Date(mulai) > new Date(selesai)) {
-                alert("Tanggal tidak valid!"); return;
+                showNotification("Tanggal tidak valid!", "warning"); return;
             }
-            const alat = alatList[currentEditIndex];
             alat.status = "Proses";
             alat.lamaKalibrasi = hitungLamaKalibrasi(mulai, selesai);
             alat.tanggalMulai = mulai;
@@ -286,10 +285,24 @@ function inisialisasiHalamanAlat() {
             renderTable();
             hideModal(modalKalibrasi);
             currentEditIndex = null;
+            showNotification("⚙️ Proses kalibrasi berhasil dimulai!");
         }
     });
+
+    // **EVENT LISTENER BARU UNTUK TOMBOL KONFIRMASI HAPUS**
+    if (confirmDeleteAlatBtn) {
+        confirmDeleteAlatBtn.addEventListener("click", () => {
+            if (currentDeleteIndex !== null) {
+                alatList.splice(currentDeleteIndex, 1);
+                localStorage.setItem(alatListKey, JSON.stringify(alatList));
+                renderTable();
+                hideModal(modalHapus);
+                showNotification("🗑️ Alat berhasil dihapus.", "warning");
+                currentDeleteIndex = null; // Reset index setelah dihapus
+            }
+        });
+    }
     
     // Panggil renderTable() sekali di akhir untuk menampilkan data saat pertama kali dimuat
     renderTable();
-    console.log("Inisialisasi halaman alat selesai.");
 }
