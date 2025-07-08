@@ -1,9 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("loginForm");
-    const loginButton = document.getElementById("loginButton");
     const loginMessage = document.getElementById("loginMessage");
-    const togglePassword = document.getElementById("togglePassword");
     const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    
+    const passwordIcon = document.getElementById("passwordIcon");
+
+    // PASTIKAN KEDUA PATH INI BENAR
+    const iconMataTertutup = "../gambar/lihat.png";
+    const iconMataTerbuka = "../gambar/eye.png";
 
     loginForm.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -56,14 +61,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Fitur toggle show/hide password
-    togglePassword.addEventListener("click", () => {
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            togglePassword.textContent = "🙈";
-        } else {
-            passwordInput.type = "password";
-            togglePassword.textContent = "👁️";
-        }
-    });
+    // Ganti logika toggle password di login.js dengan ini
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener("click", () => {
+            const isPassword = passwordInput.type === "password";
+            passwordInput.type = isPassword ? "text" : "password";
+
+            // Ganti kelas ikon
+            togglePassword.classList.toggle("fa-eye");
+            togglePassword.classList.toggle("fa-eye-slash");
+        });
+    }
 });

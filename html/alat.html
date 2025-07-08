@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
   <nav class="navbar-modern">
@@ -27,13 +28,8 @@
                 <span class="dropdown-arrow">▼</span>
             </div>
             <div class="dropdown-content-modern" id="userDropdownContent">
-                <a href="profile.html">
-                    <span>👤</span> Profil Saya
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" id="logoutBtn">
-                    <span>🔒</span> Logout
-                </a>
+                <a href="profile.html"><i class="fa-solid fa-user-gear"></i> Profil Saya</a>
+                <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
             </div>
         </div>
     </div>
@@ -53,7 +49,7 @@
             <option value="Proses">Proses</option>
             <option value="Selesai">Selesai</option>
           </select>
-          <button id="btnTambahAlat" class="btn-primary">➕ Tambah Alat</button>
+          <button id="btnTambahAlat" class="btn-primary"><i class="fa-solid fa-plus"></i> Tambah Alat</button>
         </div>
       </div>
 
@@ -159,7 +155,29 @@
   </div>
 
   <div class="modal-overlay hidden" id="kalibrasiModal">
+    <div class="modal-box" style="max-width: 450px;">
+      <div class="modal-header">
+          <h3 class="modal-title">Proses Kalibrasi Alat</h3>
+          <button class="modal-close-btn" data-modal-id="kalibrasiModal">&times;</button>
+      </div>
+      <form id="kalibrasiForm">
+          <div class="modal-body">
+              <div class="form-group">
+                  <label for="kalMulai">Tanggal Mulai Kalibrasi</label>
+                  <input type="date" id="kalMulai" required>
+              </div>
+              <div class="form-group">
+                  <label for="kalSelesai">Estimasi Tanggal Selesai</label>
+                  <input type="date" id="kalSelesai" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn-secondary" data-modal-id="kalibrasiModal">Batal</button>
+              <button type="submit" class="btn-primary">Mulai Proses</button>
+          </div>
+      </form>
     </div>
+  </div>
 
   <script src="../js/alat.js"></script>
 </body>

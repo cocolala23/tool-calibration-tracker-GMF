@@ -177,10 +177,16 @@ function inisialisasiHalamanAlat() {
             let statusHtml = '-';
             if (alat.status === 'Proses') statusHtml = `<span class="status-badge status-proses">Proses</span>`;
             else if (alat.status === 'Selesai') statusHtml = `<span class="status-badge status-selesai">Selesai</span>`;
-
-            let aksiHtml = `<button class="action-btn edit-btn" title="Edit" onclick="openEditModal(${globalIndex})">✏️</button> <button class="action-btn delete-btn" title="Hapus" onclick="hapusAlat(${globalIndex})">🗑️</button>`;
-            if (alat.status === 'Proses') aksiHtml += `<button class="action-btn complete-btn" title="Selesaikan Kalibrasi" onclick="selesaiKalibrasi(${globalIndex})">✔️</button>`;
-            else if (alat.status !== 'Selesai') aksiHtml += `<button class="action-btn calibrate-btn" title="Mulai Kalibrasi" onclick="openKalibrasiModal(${globalIndex})">⚙️</button>`;
+            
+            let aksiHtml = `
+                <button class="action-btn edit-btn" title="Edit" onclick="openEditModal(${globalIndex})"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="action-btn delete-btn" title="Hapus" onclick="hapusAlat(${globalIndex})"><i class="fa-solid fa-trash-can"></i></button>
+            `;
+            if (alat.status === 'Proses') {
+                aksiHtml += `<button class="action-btn complete-btn" title="Selesaikan Kalibrasi" onclick="selesaiKalibrasi(${globalIndex})"><i class="fa-solid fa-check"></i></button>`;
+            } else if (alat.status !== 'Selesai') {
+                aksiHtml += `<button class="action-btn calibrate-btn" title="Mulai Kalibrasi" onclick="openKalibrasiModal(${globalIndex})"><i class="fa-solid fa-sliders"></i></button>`;
+            }
 
             const row = document.createElement("tr");
             row.innerHTML = `<td>${alat.registration}</td><td>${alat.description}</td><td>${alat.merk || '-'}</td><td>${alat.model || '-'}</td><td>${alat.pn || '-'}</td><td>${alat.sn || '-'}</td><td>${alat.unit || '-'}</td><td>${alat.unitDesc || '-'}</td><td>${alat.location || '-'}</td><td>${(alat.status === "Proses" || alat.status === "Selesai") ? '-' : alat.nextDue}</td><td class="${tenggat.class}">${tenggat.text}</td><td>${statusHtml}</td><td>${alat.lamaKalibrasi || '-'}</td><td>${alat.tanggalSelesai || '-'}</td><td class="kolom-aksi-modern">${aksiHtml}</td>`;
