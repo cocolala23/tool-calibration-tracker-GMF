@@ -195,4 +195,14 @@ function renderStatusKalibrasi(alatList) {
     row.innerHTML = `<td>${item.description}</td><td>${item.tanggalSelesai || "-"}</td><td>${sisaWaktuLabel}</td>`;
     table.appendChild(row);
   });
+
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const navLinks = document.getElementById("navLinks");
+
+  if (hamburgerBtn && navLinks) {
+      hamburgerBtn.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+      });
+  }
+
 }

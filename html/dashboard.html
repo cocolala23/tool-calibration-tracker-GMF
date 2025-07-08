@@ -13,29 +13,34 @@
 </head>
 <body>
   <nav class="navbar-modern">
-    <div class="navbar-brand">
-        <img src="../gambar/logo.png" alt="Logo" class="navbar-logo-modern" />
-        <span class="navbar-title">Kalibrasi Alat</span>
-    </div>
+      <div class="navbar-brand">
+          <img src="../gambar/logo.png" alt="Logo" class="navbar-logo-modern" />
+          <span class="navbar-title">Kalibrasi Alat</span>
+      </div>
 
-    <div class="navbar-links">
-        <a href="dashboard.html" class="nav-link active" id="nav-dashboard">Dashboard</a>
-        <a href="alat.html" class="nav-link" id="nav-alat">Tools</a>
-    </div>
+      <div class="navbar-links" id="navLinks">
+          <a href="dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a>
+          <a href="alat.html" class="nav-link" id="nav-alat">Tools</a>
+      </div>
 
-    <div class="navbar-user-section">
-        <div class="user-dropdown-modern">
-            <div class="user-info" id="userDropdownTrigger">
-                <span class="user-avatar"></span>
-                <span id="loggedInUser" class="username-display">Pengguna</span>
-                <span class="dropdown-arrow">▼</span>
-            </div>
-            <div class="dropdown-content-modern" id="userDropdownContent">
-                <a href="profile.html"><i class="fa-solid fa-user-gear"></i> Profil Saya</a>
-                <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-            </div>
-        </div>
-    </div>
+      <div class="navbar-user-section">
+          <div class="user-dropdown-modern">
+              <div class="user-info" id="userDropdownTrigger">
+                  <span class="user-avatar" id="navUserAvatar"></span>
+                  <span id="loggedInUser" class="username-display">Pengguna</span>
+                  <span class="dropdown-arrow">▼</span>
+              </div>
+              <div class="dropdown-content-modern" id="userDropdownContent">
+                  <a href="profile.html"><i class="fa-solid fa-user-gear"></i> Profil Saya</a>
+                  <div class="dropdown-divider"></div>
+                  <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+              </div>
+          </div>
+      </div>
+      
+      <button class="hamburger-menu" id="hamburgerBtn">
+          <i class="fa-solid fa-bars"></i>
+      </button>
   </nav>
 
   <main class="dashboard-container">
