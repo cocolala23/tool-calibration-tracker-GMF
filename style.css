@@ -1,6 +1,3 @@
-/* =================================
-   1. GAYA UMUM & RESET
-   ================================= */
 html {
   overflow-y: scroll;
 }
@@ -1048,5 +1045,104 @@ input[type="password"]::-ms-reveal {
   .tools-actions .btn-primary {
     width: 100%;
     box-sizing: border-box;
+  }
+}
+
+/* =================================
+   PENYESUAIAN RESPONSIVE
+   ================================= */
+
+/* Tombol Hamburger disembunyikan di layar besar */
+.hamburger-menu {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #03045e;
+  cursor: pointer;
+}
+
+/* Aturan untuk layar kecil (lebar maks 900px) */
+@media (max-width: 900px) {
+  /* Tampilkan tombol hamburger */
+  .hamburger-menu {
+    display: block;
+  }
+  /* Sembunyikan menu utama */
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    flex-direction: column;
+    padding-bottom: 10px;
+  }
+  /* Kelas 'show' akan ditambahkan oleh JS untuk menampilkan menu */
+  .navbar-links.show {
+    display: flex;
+  }
+  .nav-link {
+    padding: 15px 30px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  .nav-link.active::after {
+    display: none;
+  }
+}
+
+/* Aturan untuk layar HP (lebar maks 600px) */
+@media (max-width: 600px) {
+  /* Perkecil font dan padding halaman utama */
+  body {
+    font-size: 14px;
+  }
+  .tools-title, .profile-card h2, .auth-card h2 {
+    font-size: 1.5em;
+  }
+  .main-card, .auth-card {
+    padding: 20px 15px;
+  }
+
+  /* Tata letak header di halaman Tools agar vertikal */
+  .card-header-tools {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  .tools-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tools-actions .btn-primary {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* PENYESUAIAN UNTUK MODAL/POP-UP */
+  .modal-box {
+    width: 95%; /* Buat modal lebih lebar di layar HP */
+  }
+  .modal-header,
+  .modal-body,
+  .modal-footer,
+  .modal-footer-delete {
+    padding: 15px;
+  }
+  .modal-title,
+  .modal-title-delete {
+    font-size: 1.1em;
+  }
+  .form-grid {
+    grid-template-columns: 1fr; /* Paksa form jadi satu kolom */
+  }
+  .modal-footer,
+  .modal-footer-delete {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 }
