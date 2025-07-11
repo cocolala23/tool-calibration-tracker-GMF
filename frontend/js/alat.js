@@ -22,6 +22,7 @@ async function inisialisasiHalamanAlat() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         alatList = await response.json();
+        console.log("Data yang diterima dari server:", alatList);
     } catch (error) {
         console.error("Gagal mengambil data alat dari server:", error);
         showNotification("Gagal memuat data dari server!", "warning");
@@ -108,25 +109,39 @@ async function inisialisasiHalamanAlat() {
         const paginatedData = filteredData.slice(start, end);
         tableBody.innerHTML = "";
         paginatedData.forEach(alat => {
-            const tenggat = (alat.status === "Proses" || alat.status === "Selesai") ? { text: '-', class: '' } : hitungTenggat(alat.nextDue);
+            // (1) Cek dan ambil data tanggal dengan nama properti yang benar
+            // Kode ini akan memeriksa 'alat.nextDue', jika tidak ada, ia akan memeriksa 'alat.next_due'
+            const nextDueDateValue = alat.nextDue || alat.next_due;
+
+            // (2) Proses tanggal dengan aman untuk mencegah error
+            const isProcessed = alat.status === "Proses" || alat.status === "Selesai";
+            const nextDueDate = nextDueDateValue ? new Date(nextDueDateValue) : null;
+            
+            // (3) Siapkan variabel untuk ditampilkan di tabel
+            const displayDate = !isProcessed && nextDueDate ? nextDueDate.toISOString().split('T')[0] : '-';
+            const tenggat = !isProcessed && nextDueDate ? hitungTenggat(nextDueDate) : { text: '-', class: '' };
+
+            // --- Sisa kode untuk statusHtml dan aksiHtml tidak perlu diubah ---
             let statusHtml = '-';
             if (alat.status === 'Proses') statusHtml = `<span class="status-badge status-proses">Proses</span>`;
             else if (alat.status === 'Selesai') statusHtml = `<span class="status-badge status-selesai">Selesai</span>`;
-            
+
             let aksiHtml = `
-                <button class="action-btn edit-btn js-edit" title="Edit" data-sn="${alat.sn}"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button class="action-btn delete-btn js-delete" title="Hapus" data-sn="${alat.sn}"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="action-btn edit-btn js-edit" title="Edit" data-registration="${alat.registration}"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="action-btn delete-btn js-delete" title="Hapus" data-registration="${alat.registration}"><i class="fa-solid fa-trash-can"></i></button>
             `;
             if (alat.status === 'Proses') {
-                aksiHtml += `<button class="action-btn complete-btn js-complete" title="Selesaikan Kalibrasi" data-sn="${alat.sn}"><i class="fa-solid fa-check"></i></button>`;
+                aksiHtml += `<button class="action-btn complete-btn js-complete" title="Selesaikan Kalibrasi" data-registration="${alat.registration}"><i class="fa-solid fa-check"></i></button>`;
             } else if (alat.status !== 'Selesai') {
-                aksiHtml += `<button class="action-btn calibrate-btn js-calibrate" title="Mulai Kalibrasi" data-sn="${alat.sn}"><i class="fa-solid fa-sliders"></i></button>`;
+                aksiHtml += `<button class="action-btn calibrate-btn js-calibrate" title="Mulai Kalibrasi" data-registration="${alat.registration}"><i class="fa-solid fa-sliders"></i></button>`;
             }
 
             const row = document.createElement("tr");
-            row.innerHTML = `<td>${alat.registration}</td><td>${alat.description}</td><td>${alat.merk || '-'}</td><td>${alat.model || '-'}</td><td>${alat.pn || '-'}</td><td>${alat.sn || '-'}</td><td>${alat.unit || '-'}</td><td>${alat.unitDesc || '-'}</td><td>${alat.location || '-'}</td><td>${(alat.status === "Proses" || alat.status === "Selesai") ? '-' : alat.nextDue}</td><td class="${tenggat.class}">${tenggat.text}</td><td>${statusHtml}</td><td>${alat.lamaKalibrasi || '-'}</td><td>${alat.tanggalSelesai || '-'}</td><td class="kolom-aksi-modern">${aksiHtml}</td>`;
+            // (4) Gunakan variabel yang sudah aman di dalam HTML
+            row.innerHTML = `<td>${alat.registration}</td><td>${alat.description}</td><td>${alat.merk || '-'}</td><td>${alat.model || '-'}</td><td>${alat.pn || '-'}</td><td>${alat.sn || '-'}</td><td>${alat.unit || '-'}</td><td>${alat.unitDesc || '-'}</td><td>${alat.location || '-'}</td><td>${displayDate}</td><td class="${tenggat.class}">${tenggat.text}</td><td>${statusHtml}</td><td>${alat.lamaKalibrasi || '-'}</td><td>${alat.tanggalSelesai || '-'}</td><td class="kolom-aksi-modern">${aksiHtml}</td>`;
             tableBody.appendChild(row);
         });
+
         renderPaginationControls(filteredData.length);
         if(paginationInfo) paginationInfo.textContent = `Menampilkan ${paginatedData.length > 0 ? start + 1 : 0} - ${start + paginatedData.length} dari ${filteredData.length} alat`;
     }
@@ -158,11 +173,11 @@ async function inisialisasiHalamanAlat() {
             const button = event.target.closest('.action-btn');
             if (!button) return;
 
-            const sn = button.dataset.sn;
-            if (!sn) return;
+            const registration = button.dataset.registration;
+            if (!registration) return;
 
-            currentDataSn = sn;
-            const index = alatList.findIndex(alat => alat.sn === sn);
+            currentDataSn = registration; // Kita tetap pakai variabel ini, tapi isinya registration
+            const index = alatList.findIndex(alat => alat.registration === registration);
             if (index === -1) return;
             
             if (button.classList.contains('js-edit')) {
@@ -179,8 +194,12 @@ async function inisialisasiHalamanAlat() {
                 document.getElementById("editNextDue").value = alat.nextDue;
                 showModal(modalEdit);
             } else if (button.classList.contains('js-delete')) {
-                document.getElementById("namaAlatDihapus").textContent = `"${alatList[index].description}"`;
-                showModal(modalHapus);
+                const alat = alatList[index];
+                // Simpan nama alat di modal
+                document.getElementById("namaAlatDihapus").textContent = `"${alat.description}"`;
+                // Simpan registration ID langsung di tombol konfirmasi hapus
+                document.getElementById("confirmDeleteAlatBtn").dataset.registration = alat.registration;
+                showModal(document.getElementById('deleteAlatModal'));
             } else if (button.classList.contains('js-calibrate')) {
                 if(kalibrasiForm) kalibrasiForm.reset();
                 showModal(modalKalibrasi);
@@ -188,7 +207,7 @@ async function inisialisasiHalamanAlat() {
     
                 // TAMBAHKAN SEMUA BARIS INI:
                 try {
-                    const response = await fetch(`http://localhost:3000/api/alat/selesai/${sn}`, { 
+                    const response = await fetch(`http://localhost:3000/api/alat/selesai/${registration}`, { 
                         method: 'PUT' 
                     });
 
@@ -239,7 +258,7 @@ async function inisialisasiHalamanAlat() {
         saveAlatButton.disabled = true;
 
         const alatBaru = {
-            registration: document.getElementById("registration").value,
+            registration: document.getElementById("registration").value.trim(),
             description: document.getElementById("description").value,
             merk: document.getElementById("merk").value,
             model: document.getElementById("model").value,
@@ -251,8 +270,8 @@ async function inisialisasiHalamanAlat() {
             nextDue: document.getElementById("nextDue").value,
         };
 
-        if (!alatBaru.sn) {
-            showNotification("Serial Number (S/N) wajib diisi!", "warning");
+        if (!alatBaru.registration) {
+            showNotification("Kode Registrasi wajib diisi!", "warning");
             return;
         }
 
@@ -269,12 +288,16 @@ async function inisialisasiHalamanAlat() {
             }
 
             await inisialisasiHalamanAlat(); // Muat ulang data dari server
-            hideModal(modalTambah);
+            hideModal(document.getElementById('alatModal'));
             showNotification("✅ Alat baru berhasil ditambahkan!");
 
         } catch (error) {
             console.error("Gagal mengirim data ke server:", error);
-            showNotification(error.message, "warning");
+            if (error.message.includes("alat_pkey")) {
+                showNotification("Gagal: Kode Registrasi sudah digunakan. Harap gunakan kode yang unik.", "warning");
+            } else {
+                showNotification(error.message, "warning"); // Tampilkan pesan error lain seperti biasa
+            }
         } finally {
             // 3. Tambahkan blok finally untuk mengembalikan tombol
             saveAlatButton.textContent = "Simpan Alat";
@@ -307,8 +330,8 @@ async function inisialisasiHalamanAlat() {
         };
 
         // Pastikan kita tahu S/N asli dari alat yang sedang diedit
-        const snAsli = currentDataSn; 
-        if (!snAsli) {
+        const registrationAsli = currentDataSn; 
+        if (!registrationAsli) {
             showNotification("Gagal mengidentifikasi alat yang akan diedit.", "warning");
             return;
         }
@@ -316,7 +339,7 @@ async function inisialisasiHalamanAlat() {
         try {
             // 2. Kirim data ke server menggunakan fetch dengan metode PUT
             // Perhatikan URL-nya: kita menyertakan S/N asli di akhir
-            const response = await fetch(`http://localhost:3000/api/alat/${snAsli}`, {
+            const response = await fetch(`http://localhost:3000/api/alat/${registrationAsli}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -346,8 +369,8 @@ async function inisialisasiHalamanAlat() {
 
     if(kalibrasiForm) kalibrasiForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const snUntukDikalibrasi = currentDataSn;
-        if (!snUntukDikalibrasi) return;
+        const registrationUntukDikalibrasi = currentDataSn;
+        if (!registrationUntukDikalibrasi) return;
 
         // 1. Kumpulkan data dari form kalibrasi
         const dataKalibrasi = {
@@ -364,7 +387,7 @@ async function inisialisasiHalamanAlat() {
 
         try {
             // 3. Kirim data ke endpoint baru
-            const response = await fetch(`http://localhost:3000/api/alat/kalibrasi/${snUntukDikalibrasi}`, {
+            const response = await fetch(`http://localhost:3000/api/alat/kalibrasi/${registrationUntukDikalibrasi}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dataKalibrasi),
@@ -389,17 +412,21 @@ async function inisialisasiHalamanAlat() {
 
     if (confirmDeleteAlatBtn) {
         confirmDeleteAlatBtn.addEventListener("click", async () => {
-            // Pastikan kita tahu S/N dari alat yang akan dihapus
-            const snUntukDihapus = currentDataSn;
-            if (!snUntukDihapus) return;
+            
+            const registrationUntukDihapus = event.currentTarget.dataset.registration;
+           
+            if (!registrationUntukDihapus) {
+                showNotification("Gagal menghapus: ID alat tidak ditemukan.", "warning");
+                return;
+            }
 
             try {
                 // 1. Kirim permintaan hapus ke server
-                const response = await fetch(`http://localhost:3000/api/alat/${snUntukDihapus}`, {
+                const response = await fetch(`http://localhost:3000/api/alat/${registrationUntukDihapus}`, {
                     method: 'DELETE',
                 });
 
-                if (!response.ok) {
+                if (!response.ok && response.status !== 404) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || 'Gagal menghapus alat.');
                 }
@@ -407,7 +434,7 @@ async function inisialisasiHalamanAlat() {
                 // 2. Jika berhasil, muat ulang data untuk menampilkan tabel terbaru
                 await inisialisasiHalamanAlat();
 
-                hideModal(modalHapus);
+                hideModal(document.getElementById('deleteAlatModal'));
                 showNotification("🗑️ Alat berhasil dihapus.", "warning");
 
             } catch (error) {

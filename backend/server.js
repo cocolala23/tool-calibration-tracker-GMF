@@ -27,13 +27,17 @@ app.get('/api/alat', async (req, res) => {
     }
 });
 
-// POST: Menambah alat baru
+// POST: Menambah alat baru (SUDAH DIPERBAIKI)
 app.post('/api/alat', async (req, res) => {
+    // 1. Baca properti camelCase dari body
     const { registration, description, merk, model, pn, sn, unit, unitDesc, location, nextDue } = req.body;
-    if (!sn || !registration || !description || !nextDue) {
-        return res.status(400).json({ error: 'Data wajib (Registration, Description, S/N, Next Due) tidak boleh kosong.' });
+
+    // 2. Lakukan validasi seperti biasa
+    if (!registration || !description || !nextDue) {
+        return res.status(400).json({ error: 'Data wajib (Registration, Description, Next Due) tidak boleh kosong.' });
     }
     try {
+        // 3. Gunakan properti camelCase dalam query, tapi tulis nama kolom snake_case di query SQL
         const [alatBaru] = await sql`
             INSERT INTO alat(registration, description, merk, model, pn, sn, unit, unit_desc, location, next_due, status)
             VALUES(${registration}, ${description}, ${merk}, ${model}, ${pn}, ${sn}, ${unit}, ${unitDesc}, ${location}, ${nextDue}, '-')
@@ -42,36 +46,50 @@ app.post('/api/alat', async (req, res) => {
         res.status(201).json(alatBaru);
     } catch (err) {
         console.error("Error saat menambah alat:", err);
-        res.status(500).json({ error: 'Gagal menambahkan alat baru. Pastikan S/N atau Registration unik.' });
+        // (Opsional tapi direkomendasikan) Beri pesan error yang lebih spesifik
+        if (err.code === '23505') { // 23505 adalah kode error untuk unique_violation di PostgreSQL
+            return res.status(409).json({ error: `Gagal: ${err.constraint_name} sudah ada.` });
+        }
+        res.status(500).json({ error: 'Terjadi kesalahan pada server saat menambah alat.' });
     }
 });
 
-// PUT: Mengedit data alat berdasarkan S/N
-app.put('/api/alat/:sn', async (req, res) => {
-    const { sn: targetSn } = req.params;
+// PUT: Mengedit data alat berdasarkan Registration (SUDAH DIPERBAIKI)
+app.put('/api/alat/:registration', async (req, res) => {
+    const { registration: targetRegistration } = req.params;
     const { registration, description, merk, model, pn, sn, unit, unitDesc, location, nextDue } = req.body;
     try {
         const [alatDiedit] = await sql`
             UPDATE alat SET
-                registration = ${registration}, description = ${description}, merk = ${merk},
-                model = ${model}, pn = ${pn}, sn = ${sn}, unit = ${unit}, unit_desc = ${unitDesc},
-                location = ${location}, next_due = ${nextDue}
-            WHERE sn = ${targetSn}
+                registration = ${registration},
+                description = ${description},
+                merk = ${merk},
+                model = ${model},
+                pn = ${pn},
+                sn = ${sn},
+                unit = ${unit},
+                unit_desc = ${unitDesc},
+                location = ${location},
+                next_due = ${nextDue} -- <-- TAMBAHKAN BARIS INI
+            WHERE registration = ${targetRegistration}
             RETURNING *
         `;
         if (!alatDiedit) return res.status(404).json({ error: 'Alat tidak ditemukan.' });
         res.json(alatDiedit);
     } catch (err) {
         console.error("Error saat mengedit alat:", err);
+        if (err.code === '23505') {
+            return res.status(409).json({ error: `Gagal: S/N atau Registration yang baru sudah digunakan.` });
+        }
         res.status(500).json({ error: 'Gagal mengedit alat.' });
     }
 });
 
-// DELETE: Menghapus alat berdasarkan S/N
-app.delete('/api/alat/:sn', async (req, res) => {
-    const { sn } = req.params;
+// DELETE: Menghapus alat berdasarkan Registration (KODE BARU)
+app.delete('/api/alat/:registration', async (req, res) => {
+    const { registration } = req.params;
     try {
-        const result = await sql`DELETE FROM alat WHERE sn = ${sn} RETURNING *`;
+        const result = await sql`DELETE FROM alat WHERE registration = ${registration} RETURNING *`;
         if (result.count === 0) return res.status(404).json({ error: 'Alat tidak ditemukan.' });
         res.status(200).json({ message: 'Alat berhasil dihapus.' });
     } catch (err) {
@@ -81,15 +99,15 @@ app.delete('/api/alat/:sn', async (req, res) => {
 });
 
 // PUT: Memperbarui status kalibrasi
-app.put('/api/alat/kalibrasi/:sn', async (req, res) => {
-    const { sn } = req.params;
+app.put('/api/alat/kalibrasi/:registration', async (req, res) => {
+    const { registration } = req.params;
     const { status, calibration_start, calibration_end } = req.body;
     try {
         const [alatDikalibrasi] = await sql`
             UPDATE alat SET
                 status = ${status}, calibration_start = ${calibration_start},
                 calibration_end = ${calibration_end}
-            WHERE sn = ${sn}
+            WHERE registration = ${registration}
             RETURNING *
         `;
         if (!alatDikalibrasi) return res.status(404).json({ error: 'Alat tidak ditemukan.' });
@@ -101,13 +119,13 @@ app.put('/api/alat/kalibrasi/:sn', async (req, res) => {
 });
 
 // PUT: Menyelesaikan proses kalibrasi
-app.put('/api/alat/selesai/:sn', async (req, res) => {
-    const { sn } = req.params;
+app.put('/api/alat/selesai/:registration', async (req, res) => {
+    const { registration } = req.params;
     const tanggalSelesai = new Date();
     try {
         const [alatSelesai] = await sql`
             UPDATE alat SET status = 'Selesai', calibration_end = ${tanggalSelesai}
-            WHERE sn = ${sn}
+            WHERE registration = ${registration}
             RETURNING *
         `;
         if (!alatSelesai) return res.status(404).json({ error: 'Alat tidak ditemukan.' });
