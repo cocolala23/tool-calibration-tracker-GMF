@@ -29,15 +29,19 @@ app.get('/api/alat', async (req, res) => {
 
 // POST: Menambah alat baru (SUDAH DIPERBAIKI)
 app.post('/api/alat', async (req, res) => {
-    // 1. Baca properti camelCase dari body
-    const { registration, description, merk, model, pn, sn, unit, unitDesc, location, nextDue } = req.body;
+    // Ambil semua data dari body
+    const { registration, description, merk, model, pn, unit, unitDesc, location, nextDue } = req.body;
+    
+    // PERUBAHAN KUNCI: Cara aman untuk memproses 'sn'
+    // Cek dulu apakah req.body.sn ada, baru diproses.
+    const sn = (req.body.sn && req.body.sn.trim()) ? req.body.sn.trim() : null;
 
-    // 2. Lakukan validasi seperti biasa
+    // Validasi data wajib
     if (!registration || !description || !nextDue) {
         return res.status(400).json({ error: 'Data wajib (Registration, Description, Next Due) tidak boleh kosong.' });
     }
+
     try {
-        // 3. Gunakan properti camelCase dalam query, tapi tulis nama kolom snake_case di query SQL
         const [alatBaru] = await sql`
             INSERT INTO alat(registration, description, merk, model, pn, sn, unit, unit_desc, location, next_due, status)
             VALUES(${registration}, ${description}, ${merk}, ${model}, ${pn}, ${sn}, ${unit}, ${unitDesc}, ${location}, ${nextDue}, '-')
@@ -46,9 +50,13 @@ app.post('/api/alat', async (req, res) => {
         res.status(201).json(alatBaru);
     } catch (err) {
         console.error("Error saat menambah alat:", err);
-        // (Opsional tapi direkomendasikan) Beri pesan error yang lebih spesifik
-        if (err.code === '23505') { // 23505 adalah kode error untuk unique_violation di PostgreSQL
-            return res.status(409).json({ error: `Gagal: ${err.constraint_name} sudah ada.` });
+        if (err.code === '23505') { 
+            if (err.constraint_name === 'alat_pkey') {
+                return res.status(409).json({ error: `Gagal: Kode Registrasi sudah ada.` });
+            }
+            if (err.constraint_name === 'alat_sn_key') {
+                return res.status(409).json({ error: `Gagal: Serial Number sudah digunakan.` });
+            }
         }
         res.status(500).json({ error: 'Terjadi kesalahan pada server saat menambah alat.' });
     }
@@ -57,7 +65,11 @@ app.post('/api/alat', async (req, res) => {
 // PUT: Mengedit data alat berdasarkan Registration (SUDAH DIPERBAIKI)
 app.put('/api/alat/:registration', async (req, res) => {
     const { registration: targetRegistration } = req.params;
-    const { registration, description, merk, model, pn, sn, unit, unitDesc, location, nextDue } = req.body;
+    const { registration, description, merk, model, pn, unit, unitDesc, location, nextDue } = req.body;
+    
+    // Proses 'sn' secara terpisah, sama seperti di atas
+    const sn = req.body.sn && req.body.sn.trim() !== '' ? req.body.sn.trim() : null;
+
     try {
         const [alatDiedit] = await sql`
             UPDATE alat SET
@@ -66,17 +78,18 @@ app.put('/api/alat/:registration', async (req, res) => {
                 merk = ${merk},
                 model = ${model},
                 pn = ${pn},
-                sn = ${sn},
+                sn = ${sn}, -- Menggunakan 'sn' yang sudah diproses
                 unit = ${unit},
                 unit_desc = ${unitDesc},
                 location = ${location},
-                next_due = ${nextDue} -- <-- TAMBAHKAN BARIS INI
+                next_due = ${nextDue}
             WHERE registration = ${targetRegistration}
             RETURNING *
         `;
         if (!alatDiedit) return res.status(404).json({ error: 'Alat tidak ditemukan.' });
         res.json(alatDiedit);
     } catch (err) {
+        // ... (blok catch bisa disesuaikan seperti di atas juga)
         console.error("Error saat mengedit alat:", err);
         if (err.code === '23505') {
             return res.status(409).json({ error: `Gagal: S/N atau Registration yang baru sudah digunakan.` });

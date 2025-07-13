@@ -411,17 +411,20 @@ async function inisialisasiHalamanAlat() {
     });
 
     if (confirmDeleteAlatBtn) {
-        confirmDeleteAlatBtn.addEventListener("click", async () => {
-            
-            const registrationUntukDihapus = event.currentTarget.dataset.registration;
-           
+        confirmDeleteAlatBtn.addEventListener("click", async (event) => {
+            const deleteButton = event.currentTarget; // Simpan referensi tombol
+            const registrationUntukDihapus = deleteButton.dataset.registration;
+
             if (!registrationUntukDihapus) {
                 showNotification("Gagal menghapus: ID alat tidak ditemukan.", "warning");
                 return;
             }
 
             try {
-                // 1. Kirim permintaan hapus ke server
+                // (1) Langsung nonaktifkan tombol untuk mencegah klik ganda
+                deleteButton.disabled = true;
+                deleteButton.textContent = "Menghapus...";
+
                 const response = await fetch(`http://localhost:3000/api/alat/${registrationUntukDihapus}`, {
                     method: 'DELETE',
                 });
@@ -430,16 +433,18 @@ async function inisialisasiHalamanAlat() {
                     const errorData = await response.json();
                     throw new Error(errorData.error || 'Gagal menghapus alat.');
                 }
-
-                // 2. Jika berhasil, muat ulang data untuk menampilkan tabel terbaru
+                
                 await inisialisasiHalamanAlat();
-
                 hideModal(document.getElementById('deleteAlatModal'));
                 showNotification("🗑️ Alat berhasil dihapus.", "warning");
 
             } catch (error) {
                 console.error("Gagal mengirim permintaan hapus:", error);
                 showNotification(error.message, "warning");
+            } finally {
+                // (2) Gunakan finally untuk memastikan tombol aktif kembali apa pun yang terjadi
+                deleteButton.disabled = false;
+                deleteButton.textContent = "Ya, Hapus";
             }
         });
     }
