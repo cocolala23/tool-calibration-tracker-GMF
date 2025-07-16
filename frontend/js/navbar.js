@@ -3,9 +3,7 @@ const loggedInUser = localStorage.getItem("loggedInUser");
 if (!loggedInUser) {
     alert("❗ Anda harus login terlebih dahulu.");
     window.location.href = "index.html";
-    // Hentikan eksekusi sisa skrip jika tidak login
-    // Ini penting agar tidak ada error di console
-    throw new Error("User not logged in"); 
+    return;
 }
 const loggedInUserDisplay = document.getElementById("loggedInUser");
 if (loggedInUserDisplay) loggedInUserDisplay.textContent = loggedInUser;

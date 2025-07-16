@@ -3,51 +3,131 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - Monitoring Kalibrasi</title>
+  <title>Dashboard Kalibrasi</title>
   <link rel="stylesheet" href="../style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="notification" id="notificationBox"></div>
-  <div class="login-page-wrapper">
-    <div class="login-hero-panel">
-      <div class="hero-content">
-        <img src="../gambar/logo.png" alt="Logo Aplikasi" class="hero-logo">
-        <h1>Selamat Datang Kembali</h1>
-        <p>Sistem Monitoring Kalibrasi Alat. Silakan masuk untuk melanjutkan.</p>
-      </div>
+  <nav class="navbar-modern">
+    <div class="navbar-brand">
+      <img src="../gambar/logo.png" alt="Logo" class="navbar-logo-modern" />
+      <span class="navbar-title">Kalibrasi Alat</span>
     </div>
 
-    <div class="login-form-panel">
-      <div class="form-container">
-        <h2>Login Operator</h2>
-        <form id="loginForm" autocomplete="off" novalidate>
-          <div class="input-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required />
-            <i class="fa-solid fa-user input-icon"></i>
-          </div>
+    <div class="navbar-links" id="navLinks">
+      <a href="../html/dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a>
+      <a href="../html/alat.html" class="nav-link" id="nav-alat">Tools</a>
+    </div>
 
-          <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required />
-            <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
-          </div>
-
-          <button type="submit" id="loginButton" class="btn-primary">Login</button>
-          
-          <div id="loginMessage" class="login-message"></div>
-        </form>
-        <div class="register-link">
-          <p>Belum punya akun? <a href="register.html">Daftar</a></p>
+    <div class="navbar-user-section">
+      <div class="user-dropdown-modern">
+        <div class="user-info" id="userDropdownTrigger">
+          <span class="user-avatar" id="navUserAvatar"></span>
+          <span id="loggedInUser" class="username-display">Pengguna</span>
+          <span class="dropdown-arrow">▼</span>
+        </div>
+        <div class="dropdown-content-modern" id="userDropdownContent">
+          <a href="../html/profile.html"><i class="fa-solid fa-user-gear"></i> Profil Saya</a>
+          <div class="dropdown-divider"></div>
+          <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
         </div>
       </div>
     </div>
-  </div>
+    
+    <button class="hamburger-menu" id="hamburgerBtn">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </nav>
 
-  <script src="../js/login.js"></script>
+  <main class="dashboard-container">
+    <!-- Pesan error jika gagal memuat data -->
+    <div id="error-message" style="display:none; color:red; text-align:center; margin: 1rem 0;"></div>
+
+    <!-- Statistik -->
+    <div class="stat-cards-grid">
+      <div class="stat-card">
+        <h3>Total Alat</h3>
+        <p id="statTotalAlat">0</p>
+        <div class="stat-card-icon icon-total">🧰</div>
+      </div>
+      <div class="stat-card">
+        <h3>Proses Kalibrasi</h3>
+        <p id="statProses">0</p>
+        <div class="stat-card-icon icon-proses">⚙️</div>
+      </div>
+      <div class="stat-card">
+        <h3>Segera Jatuh Tempo</h3>
+        <p id="statSegeraJatuhTempo">0</p>
+        <div class="stat-card-icon icon-segera">🟡</div>
+      </div>
+      <div class="stat-card">
+        <h3>Lewat Tenggat</h3>
+        <p id="statLewatTenggat">0</p>
+        <div class="stat-card-icon icon-lewat">🔴</div>
+      </div>
+    </div>
+
+    <!-- Konten utama -->
+    <div class="main-grid">
+      <!-- Grafik Kalibrasi -->
+      <div class="card card-full">
+        <div class="card-header">
+          <h3>Alat Selesai Dikalibrasi (6 Bulan Terakhir)</h3>
+        </div>
+        <div class="chart-container">
+          <canvas id="grafikKalibrasi"></canvas>
+        </div>
+      </div>
+
+      <!-- Jadwal Kalibrasi Terdekat -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Jadwal Kalibrasi Terdekat</h3>
+          <a href="../html/alat.html" class="card-link">Lihat Semua</a>
+        </div>
+        <div class="table-section">
+          <table id="jadwalKalibrasiTable" class="data-table">
+            <thead>
+              <tr>
+                <th>Nama Alat</th>
+                <th>Next Due</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Status Kalibrasi -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Alat dalam Proses Kalibrasi</h3>
+          <a href="../html/alat.html" class="card-link">Lihat Semua</a>
+        </div>
+        <div class="table-section">
+          <table id="statusKalibrasiTable" class="data-table">
+            <thead>
+              <tr>
+                <th>Nama Alat</th>
+                <th>Estimasi Selesai</th>
+                <th>Sisa Waktu</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Script JS -->
+  <script src="../js/dashboard.js"></script>
+  <script src="../js/navbar.js"></script>
 </body>
 </html>
