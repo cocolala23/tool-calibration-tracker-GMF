@@ -32,3 +32,30 @@ cron.schedule('0 8 * * *', async () => {
     console.error('❌ Cron error:', err);
   }
 });
+
+//tambahan belom di coba, semuanya ga di coba ya nyed
+import cron from 'node-cron';
+import axios from 'axios';
+
+cron.schedule('0 8 * * *', async () => {
+  const tools = await db.query('SELECT * FROM tools WHERE next_due <= CURRENT_DATE + INTERVAL \'3 days\'');
+  for (const tool of tools.rows) {
+    await axios.post('https://graph.facebook.com/v18.0/YOUR_PHONE_NUMBER_ID/messages', {
+      messaging_product: "whatsapp",
+      to: tool.phone,
+      type: "template",
+      template: {
+        name: "kalibrasi_notifikasi",
+        language: { code: "id" },
+        components: [{ type: "body", parameters: [{ type: "text", text: tool.name }] }]
+      }
+    }, {
+      headers: {
+        Authorization: `Bearer YOUR_ACCESS_TOKEN`,
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+});
+// Uncomment and implement the sendWA function with your chosen API
+//butuh nomer telp baru kalau ada info aja
