@@ -1,10 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // === Logika Halaman Profil ===
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    let users = JSON.parse(localStorage.getItem("users")) || [];
     const notificationBox = document.getElementById("notificationBox");
 
-    // **Fungsi Notifikasi Modern**
     function showNotification(message, type = 'success') {
         if(notificationBox) {
             notificationBox.innerHTML = message;
@@ -14,11 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 notificationBox.classList.remove('show');
             }, 3000);
         } else {
-            alert(message); // Fallback jika elemen notifikasi tidak ditemukan
+            alert(message);
         }
     }
     
-    // Fungsi untuk mengisi data profil ke elemen HTML
     function populateProfileData() {
         if (currentUser && currentUser.username) {
             document.getElementById("profileAvatar").textContent = currentUser.username.charAt(0).toUpperCase();
@@ -27,25 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("displayId").textContent = currentUser.id;
             document.getElementById("displayUsername").textContent = currentUser.username;
             document.getElementById("displayPhone").textContent = currentUser.phone;
-            document.getElementById("displayPassword").value = currentUser.password;
         } else {
             showNotification("Sesi tidak valid, silakan login kembali.", "warning");
             setTimeout(() => { window.location.href = "index.html"; }, 2000);
         }
     }
 
-    // --- FITUR LIHAT PASSWORD ---
-    const togglePassword = document.getElementById("togglePassword");
-    const passwordInput = document.getElementById("displayPassword");
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener("click", () => {
-            const isPassword = passwordInput.type === "password";
-            passwordInput.type = isPassword ? "text" : "password";
-            togglePassword.classList.toggle("fa-eye");
-            togglePassword.classList.toggle("fa-eye-slash");
-        });
-    }
-    
     const toggleEditPassword = document.getElementById("toggleEditPassword");
     const editPasswordInput = document.getElementById("editPassword");
     if (toggleEditPassword && editPasswordInput) {
@@ -57,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- LOGIKA MODAL (UMUM) ---
     const showModal = (modalId) => {
         const modal = document.getElementById(modalId);
         if (modal) modal.classList.remove("hidden");
@@ -67,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (modal) modal.classList.add("hidden");
     };
 
-    // Event listener untuk semua tombol close modal
     document.querySelectorAll('.modal-close-btn, .btn-secondary').forEach(button => {
         button.addEventListener('click', () => {
             const modalId = button.getAttribute('data-modal-id');
@@ -75,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- LOGIKA EDIT PROFIL ---
     const openEditModalBtn = document.getElementById("openEditModalBtn");
     const editProfileForm = document.getElementById("editProfileForm");
     if (openEditModalBtn) {
@@ -89,10 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (editProfileForm) {
-        editProfileForm.addEventListener("submit", async (e) => { // Fungsi ini sekarang menjadi async
+        editProfileForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             
-            // 1. Mengumpulkan data dari form
             const newUsername = document.getElementById("editUsername").value.trim();
             const newPhone = document.getElementById("editPhone").value.trim();
             const newPassword = document.getElementById("editPassword").value;
@@ -102,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 phone: newPhone,
             };
 
-            // 2. Hanya tambahkan password ke data jika kolomnya diisi
             if (newPassword) {
                 if (newPassword.length < 4) {
                     showNotification("Password baru minimal 4 karakter.", "warning");
@@ -112,8 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
-                // 3. Kirim data ke server menggunakan fetch
-                const response = await fetch(`/api/users/${currentUser.id}`, {
+                const response = await fetch(`http://localhost:3000/api/users/${currentUser.id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedData)
@@ -121,28 +98,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const result = await response.json();
                 if (!response.ok) {
-                    // Jika server mengembalikan error, tampilkan pesannya
                     throw new Error(result.error || 'Gagal memperbarui profil.');
                 }
 
-                // 4. Jika berhasil, perbarui localStorage dengan data baru dari server
                 localStorage.setItem("currentUser", JSON.stringify(result.user));
                 localStorage.setItem("loggedInUser", result.user.username);
 
-                // 5. Perbarui tampilan
                 populateProfileData(); 
                 hideModal("editProfileModal");
                 showNotification("✅ Profil berhasil diperbarui!");
                 document.getElementById("loggedInUser").textContent = result.user.username;
 
             } catch (error) {
-                // Tangani jika ada error dari fetch atau dari server
                 showNotification(error.message, "warning");
             }
         });
     }
 
-    // --- LOGIKA HAPUS AKUN ---
     const openDeleteModalBtn = document.getElementById("openDeleteModalBtn");
     const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
     if (openDeleteModalBtn) {
@@ -151,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     if (confirmDeleteBtn) {
-        confirmDeleteBtn.addEventListener("click", async () => { // Jadikan async
+        confirmDeleteBtn.addEventListener("click", async () => {
             try {
                 const response = await fetch(`/api/users/${currentUser.id}`, {
                     method: 'DELETE'
@@ -162,19 +134,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     throw new Error(result.error);
                 }
 
-                // Jika berhasil, bersihkan semua data sesi dan arahkan ke halaman login
                 localStorage.clear();
                 sessionStorage.setItem("notification", "Akun Anda telah berhasil dihapus.");
                 window.location.href = "index.html";
 
             } catch (error) {
                 console.error("Gagal menghapus akun:", error);
-                // Tampilkan error jika gagal
                 showNotification(error.message, 'warning'); 
             }
         });
     }
-
-    // --- INISIALISASI HALAMAN ---
     populateProfileData();
 });

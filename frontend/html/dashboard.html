@@ -69,14 +69,19 @@
     </div>
 
     <div class="main-grid">
-      <div class="card card-full">
-        <div class="card-header">
-          <h3>Alat Selesai Dikalibrasi (6 Bulan Terakhir)</h3>
+        <div class="card card-full">
+            <div class="card-header">
+                <h3>Alat Selesai Dikalibrasi (Rekap Bulanan)</h3>
+                <div class="chart-controls">
+                    <select id="bulanFilter" class="filter-select"></select>
+                    <select id="tahunFilter" class="filter-select"></select>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="grafikKalibrasi"></canvas>
+            </div>
         </div>
-        <div class="chart-container">
-          <canvas id="grafikKalibrasi"></canvas>
-        </div>
-      </div>
+    </div>
 
       <div class="card">
         <div class="card-header">
