@@ -1,21 +1,18 @@
-// server.js (diubah untuk menggunakan ES Modules & library postgres)
 
+// server.js (diubah untuk menggunakan ES Modules & library postgres)
 import 'dotenv/config'; // Gantikan require('dotenv').config()
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
 import sql from './db.js'; // Impor koneksi dari db.js
-
 const app = express();
 const port = process.env.PORT || 3000;
-
+const router = express.Router();
 app.use(cors());
 app.use(express.json());
-
 // =================================
 // ENDPOINTS UNTUK ALAT
 // =================================
-
 // GET: Mengambil semua alat
 app.get('/api/alat', async (req, res) => {
     try {
@@ -26,7 +23,6 @@ app.get('/api/alat', async (req, res) => {
         res.status(500).json({ error: 'Terjadi kesalahan pada server' });
     }
 });
-
 // POST: Menambah alat baru (SUDAH DIPERBAIKI)
 app.post('/api/alat', async (req, res) => {
     // Ambil semua data dari body
@@ -35,12 +31,10 @@ app.post('/api/alat', async (req, res) => {
     // PERUBAHAN KUNCI: Cara aman untuk memproses 'sn'
     // Cek dulu apakah req.body.sn ada, baru diproses.
     const sn = (req.body.sn && req.body.sn.trim()) ? req.body.sn.trim() : null;
-
     // Validasi data wajib
     if (!registration || !description || !nextDue) {
         return res.status(400).json({ error: 'Data wajib (Registration, Description, Next Due) tidak boleh kosong.' });
     }
-
     try {
         const [alatBaru] = await sql`
             INSERT INTO alat(registration, description, merk, model, pn, sn, unit, unit_desc, location, next_due, status)
@@ -61,7 +55,6 @@ app.post('/api/alat', async (req, res) => {
         res.status(500).json({ error: 'Terjadi kesalahan pada server saat menambah alat.' });
     }
 });
-
 // PUT: Mengedit data alat berdasarkan Registration (SUDAH DIPERBAIKI)
 app.put('/api/alat/:registration', async (req, res) => {
     const { registration: targetRegistration } = req.params;
@@ -69,7 +62,6 @@ app.put('/api/alat/:registration', async (req, res) => {
     
     // Proses 'sn' secara terpisah, sama seperti di atas
     const sn = req.body.sn && req.body.sn.trim() !== '' ? req.body.sn.trim() : null;
-
     try {
         const [alatDiedit] = await sql`
             UPDATE alat SET
@@ -97,7 +89,6 @@ app.put('/api/alat/:registration', async (req, res) => {
         res.status(500).json({ error: 'Gagal mengedit alat.' });
     }
 });
-
 // DELETE: Menghapus alat berdasarkan Registration (KODE BARU)
 app.delete('/api/alat/:registration', async (req, res) => {
     const { registration } = req.params;
@@ -110,7 +101,6 @@ app.delete('/api/alat/:registration', async (req, res) => {
         res.status(500).json({ error: 'Gagal menghapus alat.' });
     }
 });
-
 // PUT: Memperbarui status kalibrasi
 app.put('/api/alat/kalibrasi/:registration', async (req, res) => {
     const { registration } = req.params;
@@ -130,7 +120,6 @@ app.put('/api/alat/kalibrasi/:registration', async (req, res) => {
         res.status(500).json({ error: 'Gagal update status kalibrasi.' });
     }
 });
-
 // PUT: Menyelesaikan proses kalibrasi
 app.put('/api/alat/selesai/:registration', async (req, res) => {
     const { registration } = req.params;
@@ -149,11 +138,9 @@ app.put('/api/alat/selesai/:registration', async (req, res) => {
     }
 });
 
-
 // =================================
 // ENDPOINTS UNTUK PENGGUNA (USERS)
 // =================================
-
 // POST: Registrasi pengguna baru
 app.post('/api/register', async (req, res) => {
     const { id, username, password, phone } = req.body;
@@ -178,7 +165,6 @@ app.post('/api/register', async (req, res) => {
         res.status(500).json({ error: 'Terjadi kesalahan pada server saat mendaftar.' });
     }
 });
-
 // POST: Login pengguna
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
@@ -198,7 +184,6 @@ app.post('/api/login', async (req, res) => {
         res.status(500).json({ error: 'Terjadi kesalahan pada server saat login.' });
     }
 });
-
 // PUT: Mengupdate profil pengguna
 app.put('/api/users/:id', async (req, res) => {
     const { id } = req.params;
@@ -226,7 +211,6 @@ app.put('/api/users/:id', async (req, res) => {
         res.status(500).json({ error: 'Gagal memperbarui profil.' });
     }
 });
-
 // DELETE: Menghapus pengguna
 app.delete('/api/users/:id', async (req, res) => {
     const { id } = req.params;
@@ -239,8 +223,28 @@ app.delete('/api/users/:id', async (req, res) => {
         res.status(500).json({ error: 'Gagal menghapus akun dari server.' });
     }
 });
-
 // Menjalankan server
 app.listen(port, () => {
     console.log(`Server berjalan di http://localhost:${port}`);
+});
+// PUT: Update Next Due dan reset status
+app.put('/api/alat/:registration/update-next-due', async (req, res) => {
+    const { registration } = req.params;
+    const { next_due } = req.body;
+    if (!next_due) {
+        return res.status(400).json({ error: 'Tanggal next_due wajib.' });
+    }
+    try {
+        const [alat] = await sql`
+            UPDATE alat
+            SET next_due = ${next_due}, status = '-'
+            WHERE registration = ${registration}
+            RETURNING *
+        `;
+        if (!alat) return res.status(404).json({ error: 'Alat tidak ditemukan.' });
+        res.json({ success: true, alat });
+    } catch (err) {
+        console.error("Error update next_due:", err);
+        res.status(500).json({ error: 'Gagal update next due.' });
+    }
 });
