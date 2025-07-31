@@ -269,8 +269,6 @@ async function checkAndSendReminders() {
     }
 }
 
-// Menjadwalkan tugas agar berjalan setiap hari pada jam 8 pagi
-// Format: 'menit jam hari_dalam_bulan bulan hari_dalam_minggu'
 // Menjadwalkan tugas agar berjalan setiap menit untuk pengujian
 // Ganti kembali ke jadwal semula setelah pengujian selesai
 cron.schedule('* * * * *', () => {
