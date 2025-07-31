@@ -6,6 +6,8 @@ window.addEventListener('pageshow', function(event) {
         inisialisasiHalamanAlat();
     }
 });
+
+
 // === FUNGSI UTAMA UNTUK MENGINISIALISASI SELURUH HALAMAN ===
 async function inisialisasiHalamanAlat() {
     
